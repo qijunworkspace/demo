@@ -1,0 +1,35 @@
+JavaScript:
+
+    单线程编程语言, 只有一个Call Stack(调用堆栈), 所有并发行为均由单线程模拟实现
+        | 同步任务: 主线程执行, 主线程当前任务执行完毕(主线程执行栈空)，去Event Queue读取排队的回调函数，进入主线程执行（Event Loop执行机制）
+        | 异步任务: 进入Event Table执行，事件完成后注册回调函数(success/error等)至Event Queue
+
+    任务定义, 不同类型的任务进入不同的Event Queue
+        | macro-task: 宏任务, 整体代码script、setTimeout、setInterval等
+        | micro-task: 微任务, Promise、process.nextTick等
+        | 主线程循环 -> 整体代码(宏任务) -> 微任务队列 -> 宏任务队列 -> 微任务队列 ...
+
+    setTimeout(function(){}, ms)
+        | 计时完成后将回调方法注册至EventQueue， 还需要等待主线程完成所有任务后调用
+        | setTimeout(fn,0), 主线程一有空闲就执行, HTML标准规定最低延迟4ms
+
+    setInterval(function(){}, ms)
+        | 循环执行任务, 每隔ms时间将function加入 Event Queue
+
+    new Promise(function(){}).then(function(){})
+        | new Promise的fn函数立即执行， then的fn函数分发到微任务的Event Queue
+    process.nextTick(callback) - node.js
+        | callback分发到微任务的Event Queue
+
+
+    全局上下文: this值指向全局对象, 浏览器中为Window对象
+    函数上下文: 函数被调用时创建, 如果被引用对象调用, this值被设置成该对象, 否则被设置为全局对象或undefined(严格模式)
+        | 创建阶段
+            | 决定this值
+            | 创建词法环境, 存储函数声明和变量(let/const)
+            | 创建变量环境, 存储var变量绑定
+        | 执行阶段
+
+        | let
+        | const
+        | var

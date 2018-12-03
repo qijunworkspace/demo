@@ -1,0 +1,7 @@
+1、配置SpringSecurity 配合springsession
+2、配置Redis
+3、配置Elasticsearch
+4、配置Druid
+5、配置Zookeeper
+6、引入通用异常处理(包含验证)
+7、mybatis

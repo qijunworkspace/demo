@@ -1,0 +1,265 @@
+NOTE:
+
+>> IDEA 快捷方式
+sout: System.out.println
+psvm: 生成main方法
+Alt + Insert : 生成 getter/setter/override/ constructor等
+Ctrl + Alt + I : 格式化选中代码
+Ctrl + Alt + O : 优化导入的类和包,去掉未使用的包
+Ctrl + Alt + B : 查看接口的实现类
+Ctrl + Enter : 修正导入的包
+Alt + Enter : 导入包
+Ctrl + F : 查找文本
+Ctrl + R : 替换文本
+Ctrl + N : 快速打开类型
+Ctrl + Y : 删除单前行
+Ctrl + U : 转到父类
+Ctrl + I : 实现方法
+Ctrl + Shift + Space : 自动补全代码, 可添加方法参数
+Ctrl + Shift + U : 大小写转换
+双击Shift :全局搜索
+
+
+>> 条件注解:
+Spring Boot的设计是先加载应用级配置, 随后再考虑(根据条件注解)自动配置类
+    @ConditionalOnMissingBean
+    @ConditionalOnWebApplication
+    @ConditionalOnClass
+    @ConditionalOnProperty(name="", havingVaule="", matchIfMissing=true) -> 根据配置文件对应的Environment
+    @Conditional(XxxConditional.class) 自定义的条件配置类(实现Condition接口)
+
+
+>> 属性配置:
+Spring Boot能从多种属性源获得属性(优先级递减)
+    (1) 命令行参数  -> 指定启动端口 java -Dserver.port=9000 -jar bootsample.jar
+    (2) java:comp/env里的JNDI属性
+    (3) JVM系统属性
+    (4) 操作系统环境变量
+    (5) 随机生成的带random.*前缀的属性(在设置其他属性时,可以引用它们,比如${random.long})
+    (6) 应用程序以外的application.properties或者application.yml文件
+    (7) 打包在应用程序内的application.properties或者application.yml文件
+    (8) 通过@PropertySource(value = "classpath:redis.properties")标注的属性源
+    (9) 默认属性
+
+
+>> springboot读取应用配置文件application.properties三种方式
+    (1) Environment类(Autowired)获取键值对
+    (2) @Value(${"server.port"})自动注入属性, 通过AutowiredAnnotationBeanPostProcessor实现
+    (3) 将一组属性自动注入到一个配置类中, @ConfigurationProperties("prefix"), springboot处理注解时将"-_"去掉转化为Java命名规范
+
+
+>> 运行环境配置:
+    设置spring.profiles.active=production 就能激活Profile, 对于不同配置Bean的创建使用@Profile("production")
+    在resources下创建application-{profile}.properties的配置文件这些配置文件在激活时会覆盖application.properties
+
+
+>> Actuator
+    | springboot2 默认不启用所有的监控
+    | 端点,使用endpoints.shutdown/metrics/*.enabled = true/false进行配置:
+        GET /autoconfig 提供了一份自动配置报告,记录哪些自动配置条件通过了,哪些没通过
+        GET /configprops 描述配置属性(包含默认值)如何注入Bean
+        GET /beans 描述应用程序上下文里全部的Bean,以及它们的关系
+        GET /dump 获取线程活动的快照
+        GET /heapdump 获取dump文件(类似jmap工具) -> 使用jhat分析(OQL查询语句)
+        GET /env 获取全部环境属性
+        GET /env/{name} 根据名称获取特定的环境属性值
+        GET /health 报告应用程序的健康指标,这些值由HealthIndicator的实现类提供
+        GET /info 获取应用程序的定制信息,这些信息由info打头的属性提供,需配置在application.properties
+        GET /mappings 描述全部的URI路径,以及它们和控制器(包含Actuator端点)的映射关系
+        GET /metrics 报告各种应用程序度量信息及运行时数据,比如内存用量和HTTP请求计数
+        GET /metrics/{name} 报告指定名称的应用程序度量值
+        POST /shutdown 关闭应用程序, 要求endpoints.shutdown.enabled设置为true
+        GET /trace 提供基本的HTTP请求跟踪信息(时间戳、HTTP头等),存储在内存中,默认100条
+    | 除了REST端点接口,Actuator还提供了远程Shell及JMX(MBean)的方式进行管理。
+
+
+>> Maven常用命令
+    mvn compile: 编译工程
+    mvn package: 编译并打包工程,target中生成jar或war
+    mvn install: 打包并安装到本地仓库
+    mvn deploy: 到包安装到本地及远程仓库
+    mvn clean: 删除target目录
+
+
+>> Spring MVC 参数
+    Model model: 对应与MVC框架中的模型,可用于视图渲染
+    JavaBean: 将参数映射到对象实例中
+    @PathVariable: 获取路径参数{param}映射到方法参数
+    @RequestParam: HTTP请求的参数,自动转换类型
+    @RequestHeader: HTTP请求头的参数,自动转换类型
+    @RequestBody: 表明请求的HTTP消息体内容是JSON,将请内容转换为指定的对象,默认使用HttpMessageConverters
+    ModelAndView: 包含模型和视图路径
+    @RequestPart: 用于文件上传,对应HTTP协议的multipart/form-data
+    MultipartFile: 处理文件上传
+    @ModelAttribute: 使用该注解的变量将作为Model的一个属性
+        | 注解在Controller的方法上,此方法会首先被调用并将结果作为Model属性保存,然后调用对应的Controller处理方法
+    InputStream/Reader, OutputStream/Writer: 获取Servlet API中的输入输出流
+    @InitBinder: 为Controller添加自定义的HTTP参数解析器
+
+Ant路径表达式: *表示匹配任意字符 **表示匹配任意路径 ?匹配单个字符
+
+
+>> Spring boot 支持JSR-303及Bean验证框架,默认使用Hibernate Validator
+    | @Null @NotNull @NotBlank(字符串不为空或不是空格字符串) @NotEmpty(对象不为Null,集合不为空)
+    | @Size(min=,max=)字符串和集合长度 @Length(字符串大小)
+    | @Min @Max(验证数字的大小),@Digits(integer=,fraction=)验证数字是否符合指定格式,@Range(min=,max=)验证数字是否在指定区间
+    | @Email(验证是否是邮件格式), @Pattern（验证对象是否符合正则表达式）
+在controller方法中给参数加上@Validated可触发一次校验，此时参数中还应提供BindingResult result来获取验证的结果
+    验证的结果需要配置AbstractErrorController来处理
+    或者@RestControllerAdvice + @ExceptionHandler进行异常拦截处理
+
+
+>> Jackson三种层次的序列化和反序列化方式:
+    | 使用JsonParser解析JSON(生成Tokens), 使用JsonGenerator生成JSON, 底层方式
+    | 使用树遍历Tree Traversing, JSON被读入JsonNode对象中, 类似XML DOM, 适用于没有POJO对应的JSON
+    | 使用DataBind, POJO <-> JSON, 可以利用注解字段来实现自定义, readVaule/writeValueAsString
+        注解:
+            @JsonProperty 属性, 指定key的别名
+            @JsonNaming 类或者属性, 指定命名策略, 如LowerCaseWithUnderscoresStrategy.class
+            @JsonIgnore 属性, 忽略此属性
+            @JsonIgnoreProperties({"xx","yy"}) 类, 忽略一组属性
+            @JsonAnySetter 方法, 接受key,value两个参数, 反序列化时未找到对应属性的键值对调用该方法, 一般向map中添加
+            @JsonAnyGetter 方法, 标注在返回Map的方法上, Jackson会取出所有键值对进行序列化
+            @JsonFormat 属性, 用于日期格式化
+            @JsonSerialize 类, 指定一个JsonSerializer<T>实现类自定义序列化, 调用JsonGenerator
+            @JsonDeserializer 类, 指定一个JsonDeserializer<T>实现类自定义反序列化, 调用JsonParser
+            @JsonView, 类或者属性, 定义序列化组, Controller方法可以选择@JsonView来序列化这一组属性
+
+
+>> 数据库访问DAO: 以SQL为中心(更灵活, JdbcTemplate/MyBatis)、以对象为中心(ORM, Hibernate)
+    | Spring Data JPA 采用Hibernate实现
+        | 配置文件
+              spring.jpa.hibernate.ddl-auto: none, 是否自动创建库(一般不用)
+              spring.jpa.show-sql: false, 是否自动打印SQL
+        | 实体注解
+              @Entity(标注实体类)、@Id(标注主键)、@Generated(标注主键生成策略)、@Column(标注列,可指定列名)
+              @ManyToOne(多个当前实体对应一个注解字段, @JoinColumn指定外键)、@OneToMany(One端必须使用mappedBy指定Many端的对象)
+        | repository: Spring Data 核心概念, 支持关系数据库和Nosql库(redis、MongoDB、Elasticsearch)
+            | CrudRepository: 提供基本的增删改查、批量操作
+            | PagingAndSortingRepository: 继承CrudRepository, 提供附加分页、排序的查询功能
+            | JpaRepository: 继承PagingAndSortRepository, 提供增删改查、Example查询
+            | 自定义Repository 继承 JpaRepository
+                | 可以添加查询方法(方法名和参数符合规定)
+                    -> 方法以findBy/getBy/queryBy开头
+                    -> 方法名包含多个实体属性, 属性间以And和Or连接, 支持Between、LessThan、GreaterThan、Like/NotLike等
+                    -> 支持排序, 方法名包含OrderByXXXAsc/Desc
+                    -> 可通过Top、First限定查询结果集
+                | 添加 @Query(JPQL语句或SQL语句)注解 的方法
+                    -> 支持参数 xxx=?1 或者 命名参数 =:name
+                    -> 可使用Pageable和Sort协助分页和排序
+                    -> 对于更新、删除操作, 必须要添加 @Modifying注解
+                |使用JPA Query, EntityManager(可注入Service)提供了实体操作的所有接口,可以实现复杂查询, 弥补Repository的不足
+
+
+>> 日志: Springboot默认使用LogBack作为日志实现, 使用Apache Commons Logging作为日志接口
+    | 在配置文件可设置日志输出级别 logging.level.root(.org/.com)=info
+    | logging.file(设置日志存放路径)、logging.path(指定日志存放目录)、logging.pattern.console/file(指定日志输出格式)
+    | 在resources目录下使用logback.xml 或 logback-spring.xml也可进行定制
+
+
+>> JUnit: 回归测试框架, 编写和运行可重复的单元测试(白盒测试)
+    | 注解: @Before(每个测试方法之前执行)、@BeforeClass(整个测试类开始时执行)、@After、@AfterClass、@Test、@Ignore
+    | Assert类: 条件不成立时抛异常
+    | 执行每个@Test方法都会创建一个新的实例， 但是Spring上下文不会重新加载
+    | Springboot 单元测试会在运行结束后进行事务回滚
+    | 集成Mockito 模拟未完成的类或者不便于调用的接口/类
+        -> @MockBean可以自动注入模拟实现(使用Mockito的静态方法定义bean的参数和返回值), 或者使用mock()方法生成模拟对象
+    | 测试Controller代码(MVC): 类注解@WebMvcTest(xxxController.class)， @Autowired MockMvc
+        -> 在该类型测试中@Service等注解的类不会被扫锚注册为容器内的Bean, 需要使用@MockBean模拟实现
+        -> mockMvc.perform(get/post/multipart).param(...).content(...).accept(...).header(...).addExpect(...);
+
+
+>> RESTful架构风格
+    | 建议使用"api"作为上下文, 增加版本标识: http://192.168.0.1/api/v1.1/xxx
+    | POST(新增资源)/PUT(完整更新资源)/GET(查询资源)/PATCH(部分更新资源)/DELETE(删除资源)/HEAD(仅返回HTTP头信息)/OPTIONS(查看URI支持的方法)
+    | 200(请求成功)/400(错误的请求/参数不对)/404(资源不存在)/405(HTTP Method不允许)/406(无法使用请求的特性来返回资源)/409(资源冲突)/500(服务器内部错误)
+    | @RestController(等价于@Controller和@ResponseBody)
+    | Springboot 提供 RestTemplate(使用RestTemplateBuilder创建) 访问所有REST服务的接口
+
+
+>> Spring Session: 分布式Web服务器同时提供服务, 使用Nginx提供反向代理, 使用Redis存放Session(Hash结构)
+    | spring session 独立于应用服务器, 同一用户可以建立多个session(多账户),可方便实现切换登录
+    | spring session 能够实现websocket与Http请求都能保持Http Session处于活跃状态
+    | spring session 可以获取非web请求(http请求)的session
+    | 需要测试过期时间
+
+    | 在请求/响应周期中, 客户端和服务端需要协商同意session id的传递方式
+        -> Http请求: 可以放在Cookie(默认)或者Header中 CookieHttpSessionStrategy/HeaderHttpSessionStrategy
+        -> Https请求: 可以使用SSL session id
+        -> JMS请求: session id存储在JMS Header中...
+    | Springboot默认使用Tomcat的Session实现(StandardSessionFacade)
+
+    | SpringSession通过(servlet规范)Filter拦截器生成Spring管理的Session, 拦截所有的web应用请求(Filter链中第一个)
+        ->  自定义getSession实现类: SessionRepositoryRequestWrapper extends HttpServletRequestWrapper
+    | 修改配置: spring.session.store-type=redis|jdbc(自动创建两张表)|mongodb|none
+
+
+    | Nginx 命令
+        -> nginx 启动Nginx, 默认端口80
+        -> nginx -s stop/quit: 快速停止服务器/等待请求处理完毕关闭服务器
+        -> nginx -s reload: 重新加载配置文件
+    | Nginx 配置(conf/nginx.conf):
+        -> http块: 可以嵌套多个Server, 定义代理、缓存、日志等
+        -> location块: 配置请求的路由
+        -> 默认论询策略, 可设置ip_hash使相同ip总是反向到相同的服务器
+
+>> 	/**
+   	 *  CRON 解释
+   	 *  格式： Seconds Minutes Hours DayofMonth Month DayofWeek (Year)
+   	 *
+   	 * Seconds: , * - / 0-59
+   	 * Minutes: , * - / 0-59
+   	 * Hours: , * - / 0-24
+   	 * DayofMonth:  , * - / ? L W C 0-31
+   	 * Month: , * - / 1-12 JAN-DEC
+   	 * DayofWeek: , * - / ? L C # 1-7 SUN-SAT
+   	 *
+   	 * 其中：
+   	 *  <*>表示任意值
+   	 *  <?>表示任意值
+   	 *  <A/B>表示从A时刻每隔B个时间段触发一次
+   	 *  <A,B>表示枚举，在A和B时刻均触发
+   	 *  <5L>表示最后一个星期四触发
+   	 *  <W>表示有效工作日,周一到周五
+   	 *  <LW>表示某个月最后一个工作日
+   	 *  <4#2>表示某个月第二个星期三
+   	 *
+   	 */
+
+>> Zookeeper 分布式协调器(本身也是分布式高可用)
+    | curator 封装Java API
+    | 节点通过路径来表示, 可以包含一定的数据(2MB字节), 还包含更新的版本、收件戳
+        -> 分为临时节点和持久化节点、顺序节点(带有序列号的节点,可判断创建先后顺序)
+        -> 节点可以被监控, 删除或更新时客户端将收到通知, 监控失效
+    | zkCli 基本命令
+        -> help 查看帮助
+        -> ls /path 查看路径下的节点
+        -> create /path value 创建节点
+        -> create -e /path value 创建临时节点
+        -> create -s /path/prefix value1 创建顺序节点(同一节点下多个序列值, [prefix0000, prefix0001, prefix0002])
+        -> get /path 获取节点数据
+            | 返回创建时cZxid、最后更新mZxid、创建时间ctime、修改时间mtime、更新次数dataVersion、
+            | ACL授权更新次数aclVersion、临时节点会话ID、节点数据长度dataLength、子节点个数numChildren
+        -> delete /path 删除节点
+        -> set /path data 设置节点数据
+        -> watch: ls命令和get命令可增加监听操作
+    | 领导选取: 多个客户端同时创建临时顺序节点 create -s -e /election/node 顺序最小的为领导者
+    | 分布式锁: 创建/locks/xxx的节点, 创建成功则获取了锁, 失败则监听节点等待节点被删除, 获取锁的客户端执行完成后删除节点
+        -> 也可以类似领导选取, 实现获取锁的排队(公平锁)
+    | 服务注册: 创建存储服务列表的节点 create /service/modular data
+        -> 对应模块的服务上线: create -e -s /service/modular/s- ip:port
+        -> 客户端调用服务时读取/service/modular/下所有节点,随机选择获取服务地址
+    | Curator应用场景
+        -> 领导节点选取
+        -> 分布式锁
+        -> 分布式读写所
+        -> 共享信号量
+        -> 栅栏和双重Double Barrier
+        -> 分布式计数器(integer/long)
+        -> 分布式队列和分布式优先级队列
+        -> 服务注册发现 curator-x-discovery
+    | Curator:
+        -> client.create().withMode().forPath("/path", value);
+        -> client.setDate().forPath("/path", value);
+        -> getDate/checkExist/watched
+        -> CuratorListener接口添加事件监听

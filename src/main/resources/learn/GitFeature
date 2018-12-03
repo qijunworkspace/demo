@@ -1,0 +1,122 @@
+Git项目管理
+
+>> SCM软件配置管理
+    | 通过执行版本控制、变更控制的规程, 以及使用合适的配置管理软件, 来保证所有配置项的完整性和可跟踪性。
+    | 一种标识、组织和控制更改的技术, 贯穿整个软件生命周期中建立和维护项目产品的完整性
+    | 工具: Microsoft VSS, CVS/SVN(集中式)等
+
+>> 分布式版本控制: 每台电脑都是完整的版本库, 通过中央版本库进行合并
+
+
+    +++++++++++++               +++++++++++              +++++++++++      #        +++++++++++
+    * Working   +               + Staging +              +  Local  +      #        +  Remote +
+    * Directory +               + Area    +              +  Repo   +      #        +  Repo   +
+    +++++++++++++               +++++++++++              +++++++++++      #        +++++++++++
+          |                          |                        |           #             |
+          |       git add            |                        |           #             |
+          |  ------------------->    |                        |           #             |
+          |                          |       git commit       |           #             |
+          |                          |  ------------------->  |           #             |
+          |                          |                        |       git push          |
+          |                          |                        | --------------------->  |
+          |                          |                        |           #             |
+          |                          |                        |           #             |
+          |                          |                        |           #             |
+          |                          |                        |       git fetch         |
+          |                          |                        | <---------------------  |
+          |                          |                        |           #             |
+          |                     git checkout                  |           #             |
+          | <-----------------------------------------------  |           #             |
+          |                          |                        |           #             |
+          |                     git merge                     |           #             |
+          | <-----------------------------------------------  |           #             |
+          |                          |                        |           #             |
+          |                          |                        |           #             |
+
+
+>> Git: 分布式、速度快、branch灵活、可以跟踪文件的修改而非文件
+
+
+>> 本地管理
+    | git config --global key value 全局配置
+    | git init 本地创建仓库
+        -> 工作目录 Working Directory: 实际文件位置
+        -> 缓存/暂存区 Stage(Index): 下一次需要提交的文件
+        -> 当前分支HEAD: 指向current branch
+    | git reflog 查看版本历史
+
+    | git status 查看仓库当前状态
+    | git diff [HEAD -- ] file 查看文件的修改内容
+    | git checkout -- file 丢弃file文件在Stage区的修改
+          -> 必须有--(否则是切换分支), 回到最近一次get commit/add时的状态, 工作区修改也被回退
+    | git reset HEAD file 把暂存区的修改撤销, 并重新放回工作区(修改还在工作区)
+          -> git reset 既可以回退版本, 也可以把暂存区的修改回退工作区
+    | git reset --soft[hard] HEAD~2 回退到倒数第二个commit(版本回退)
+
+    | git add filename 增加文件到仓库
+    | git commit -m "comment" 提交必须注释
+    | git log [--graph] [--oneline] 查看最近3次详细提交修改内容
+        | 版本号commit id由SHA1计算, reset时可以填写前面部分, git自动查询符合的
+
+    | git rm file 从版本库中删除文件(需要commit)
+
+    | git clone path 克隆仓库
+    | git checkout HEAD~ files 检出最新文件
+        -> git checkout -- file 用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”
+
+    | git branch 列出当前所有的本地分支
+    | git checkout -b newBranch 新建一个分支并切换到它
+    | git branch -m name1 name2 将name1分支改为name2
+    | git branch -d name 删除name分支
+
+
+>> 远程仓库
+    | git remote add bName/origin gitPath 设置本地仓库关联对应的远程仓库
+        -> git remote add origin git@github.com:qijunworkspace/demo.git
+    | git remote -v 查看本地的远程仓库
+    | git remote rename name1 name2 改名本地远程仓库
+    | git remote rm name 删除本地的远程仓库
+
+    | git push -u origin master 推送本地的master分支到远程的origin上
+        -> -u参数: 将本地的master分支和远程的master分支关联起来(以后可以简化命令)
+    | git push origin:issue2 删除远程origin上面提交的临时分支issue3
+
+    | git clone gitPath 克隆一个本地库
+    |
+
+
+
+    | git fetch origin -> git merge origin/master 更新合并远程仓库的最新代码索引
+    | git pull origin master 直接更新合并最新的分支代码
+    | git mergetool --tool=xxxx 合并冲突解决工具
+    | git merge master/other
+
+    | git tag 查看当前所有标签
+    | git tag -a v1.0 [-m 'comment'] 标记当前分支为v1.0版本并归档
+    | git tag -l 'v1.*' 查看1.0版本下有多少小版本
+
+
+>> commit前必须先add, 每一次更改都需要重新add file(增加的是修改部分), 可以一次commit多个修改
+   -> commit 自动串成一条时间线
+   -> HEAD表示当前版本, HEAD^(^个数表示往上回溯几个版本)或者 HEAD~2
+   -> 回退版本时, 仅会将HEAD的指向改变, 然后更新 工作区的文件
+   -> 创建Git版本库时, Git自动为我们创建了唯一个master分支
+   -> origin是远程库的默认名称
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

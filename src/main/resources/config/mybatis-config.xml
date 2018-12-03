@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 引入外部资源文件 -->
+	<properties resource="config/db.properties"></properties>
+
+ 	<settings>
+		<!-- 在本项目之中开启二级缓存 -->
+        <setting name="cacheEnabled" value="true"/>
+		<!--开启驼峰命名-->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="jdbcTypeForNull" value="NULL"></setting>
+		<setting name="lazyLoadingEnabled" value="true"></setting>
+		<setting name="aggressiveLazyLoading" value="false"></setting>
+    </settings>
+    
+	<typeAliases>
+		<typeAlias alias="Integer" type="java.lang.Integer" />
+		<typeAlias alias="Long" type="java.lang.Long" />
+		<typeAlias alias="HashMap" type="java.util.HashMap" />
+		<typeAlias alias="LinkedHashMap" type="java.util.LinkedHashMap" />
+		<typeAlias alias="ArrayList" type="java.util.ArrayList" />
+		<typeAlias alias="LinkedList" type="java.util.LinkedList" />
+	</typeAliases>
+
+
+	<!-- 配置环境：可以配置多个环境，default：配置某一个环境的唯一标识，表示默认使用哪个环境
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${spring.datasource.driver-class-name}"/>
+				<property name="url" value="${spring.datasource.url}"/>
+				<property name="username" value="${spring.datasource.username}"/>
+				<property name="password" value="${spring.datasource.password}"/>
+			</dataSource>
+		</environment>
+	</environments> -->
+
+	<!--数据库映射-->
+	<mappers>
+		<package name="com.qijun.demo.mapper"></package>
+	</mappers>
+
+</configuration>

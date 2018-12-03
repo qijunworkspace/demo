@@ -1,0 +1,175 @@
+>> elasticsearch 概念
+
+    全文搜索、地理信息检索, 也可作为NoSQL数据库、大数据分析
+        | 基于RESTFul接口访问管理, 可使用Springboot的RestTemplate进行访问,
+        | 一般使用 spring-data-elastic(Repository定义接口), 也可调用底层的 ElasticsearchTemplate+NativeSearchQueryBuilder
+
+    ES 6.X版本之后移除type的概念，默认为_doc
+
+    返回结果
+        | _id主键
+        | _version 版本号, 可以实现乐观锁
+        | _source 查询的文档
+        | _score 相关度分数
+
+    接口
+        | _search  搜索
+        | _update 部分更新
+        | _count 总数
+
+    支持的多语言分词器: 中文使用IKAnlyzer插件、analysis-smartcn
+        arabic, armenian, basque, bengali, bulgarian, catalan, czech, dutch,
+        english, finnish, french, galician, german, hindi, hungarian, indonesian,
+        irish, italian, latvian, lithuanian, norwegian, portuguese, romanian,
+        russian, sorani, spanish, swedish, turkish.
+
+    数据类型：
+        | text: 全文索引，分词并构建索引
+        | keyword: 不分词，用于Filtering
+        | long/integer/short/byte/double/float/half_float/scaled_float
+        | boolean: 只能为true或false
+        | date: 日期字符串，需定义format
+        | binary: 值作为Base64编码的字符串，默认不存储，不索引
+        | 范围类型: integer_range/float_range/long_range/double_range/date_range(时间戳整数)/ip_range
+                | 查询时设置relation匹配模式： intersects(交叉即匹配)/within(字段值是搜索值的子集)/contains(字段值是搜索值的父集)
+        | 数组类型array: 由第一个非null的类型决定，所有值类型相同
+        | 对象类型object
+        | 嵌套类型nested
+        | 地理位置数据geo_point
+
+    Mapping参数:
+        | analyzer: 分词器，默认为standard, 中文分词引入IK插件
+        | boost: 字段权重
+        | dynamic: true(默认允许自动新增字段)/false(不允许自动新增字段，但可正常写入，无法查询新字段)/strict(含新字段的文档写入时报错)
+        | copy_to: 将字段复制到目标字段，用于搜索
+        | index: 控制字段是否索引，默认为true
+        | index_options: 控制将哪些信息添加到倒排索引
+                | docs: 只索引doc_id
+                | freqs: 索引doc_id和词频
+                | positions: 索引doc_id、词频、位置，使用 近似查询proximity 或 短语查询phrase queries 将用到位置信息
+                | offsets: 索引doc_id、词频、位置、开始偏移和结束偏移，高亮功能用到偏移
+        | fielddata: 是否预加载字段的所有倒排索引，默认false，一般用于分词的字符串。
+                | 用于字段聚合分析，延迟加载机制，使用时才加载到内存中
+                | 存储在内存中，存在OOM可能
+        | doc_values: 在索引时和倒排索同时生成，并且同样不可改变(Lucene)。默认启用
+                | 倒排索引是通过term来查找doc_id，一般用于搜索
+                | doc_values通过doc_id来查找term，一般用于聚合、排序、脚本
+                | 不支持analyzed字符串，必须结合fielddata
+        | fields: 用于实现multi-fields，同一字段可以设置多个数据类型
+        | format: 设置data类型的格式
+        | properties: 用于_doc\object\nested类型的字段定义子字段
+        | normalizer: 用于keyword类型，过滤转换token的值（类似analyzer）
+        | enabled: 是否索引，默认true，可设置在_doc和字段两个维度
+        | ignore_above: 默认256，当字段文本(text\keyword)长度超过时不做倒排索引（聚合、全文索引都查不到）
+        | null_value: 遇到null值时的处理策略，默认Null
+        | ignore_malformed: 数据类型不匹配时的是否处理，默认为true，表示忽略异常，强制赋值，但不索引
+        | norms: 存储标准化因子，用于查询匹配的分数
+        | position_increment_gap: 用于近似查询和短语查询，默认100
+        | search_analyzer: 查询时使用的分词器，默认与analyzer一样
+        | similarity: 设置相关度算法，默认BM25
+        | store: 是否在_source(json对象)之外存储一份字段值，默认为false，当字段或内容比较多时，可以把特定字段设置为true单独存储，同时应该在_source中设置exclude
+        | term_vector: 获取doc内该field各个term的统计信息(term列表、每个term的位置/顺序、开始/结束位置偏移等)
+                | no(default)/yes/with_positions/with_offsets/with_positions_offsets
+
+
+    ES检索:
+        | 结构化检索/过滤Filter: 是否符合yes/no，不计算分数，一般用于结构化数据(日期、时间、数字、keyword)
+                | 精确值检索 term/bool/range.. :
+                    1、单个精确值检索term query
+                        | GET /_search { "query":{ "term": { "XXX": 20 }  } }
+                        | 使用过滤器的速度更快, constant_score 查询以非评分模式来执行 term 查询
+                            | GET /_search { "query":{ "constant_score": { "filter": { "term": { "XXX":20 } } } } }
+                        | 对于text类型的字符串还需要设置keyword子类型才能精确匹配
+                    2、布尔过滤器bool query
+                        | 格式 {
+                                "bool": {
+                                    "must": {}     //所有语句都比需匹配 -> AND
+                                    "should": {}   //至少有一个语句匹配 -> OR
+                                    "must_not": {} //所有语句都不能匹配 -> NOT
+                                    "filter": {}   //必须匹配，用于非评分&过滤模式
+                                }
+                               }
+                    3、多个精确值检索terms query
+                        | { "terms": { "XXX": [20, 30] } }
+                | 范围检索: range query
+                    | gt(大于)/lt(小于)/gte(大于等于)/lte(小于等于)
+                    | GET /_search
+                            {
+                                "query":{
+                                    "constant_score":{
+                                        "filter":{
+                                            "range":{
+                                                "xxx"：{
+                                                    "gte": 20,
+                                                    "lt":40
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                | 存在性检索: exist query
+                    | "exists":{ "xxx": "value" } 位置类似range
+                | 前缀检索: prefix query
+                    | 匹配keyword
+                    | GET /_search { "query": { "prefix": { "xxx": "preValue" } } }
+                | 通配符检索: wildcard query(？表示单个字符，*表示0个或多个字符)
+                    | 匹配keyword, 查询可能很慢(不应以通配符开头)
+                    | GET /_search { "query": { "wildcard": { "xxx": "Value*" } } }
+                | 正则表达式检索: regexp query
+                    | 使用.*?+通配符查询的性能较低
+                    | GET /_search { "query": { "regexp": { "xxx": "Value[123]+" } } }
+                | 模糊检索: fuzzy query
+                    | 查找在模糊度中指定的最大编辑距离内的所有可能匹配项,默认~2，再检查term字典，找出索引中实际存在的关键词
+                    | GET /_search { "query": { "fuzzy": { "xxx": "Valu~1" } } }
+                | 类型检索: type query(检索索引下对应type的数据)
+                    | 查找索引中指定type的所有信息
+                    | GET /_search { "query": { "type": { "value": "typeValue" } } }
+                | ID检索: ids query(检索指定id的文档)
+                    | 返回指定id的全部信息
+                    | GET /_search { "query": { "ids": { "values": ["id1", "id2", "id3"] } } }
+
+        | 全文检索/查询分析 match:
+                | 文档与查询子句是否匹配，_score表示匹配程度, 查询前应用search_analyzer解析文本
+                | 匹配检索: match query
+                    | 将解析的文本构造成boolean查询
+                    | GET /_search { "query": { "match": "xxx": { "query": "this is text", "operator": "and" } } }  // 默认是 or
+                    | 其他参数 fuzziness(基于字段类型进行模糊匹配) / "minimum_should_match":"75%"(指定匹配的词项数目)
+                | 匹配解析检索: match_phrase query
+                    | 将查询字符串解析成词项列表，只查处包含全部搜索词项(and)且位置与搜索词项相同的文档
+                    | GET /_search { "query": { "match_phrase": "xxx": { "query": "this is text"} } }
+                | 匹配解析前缀检索: match_phrase_prefix query
+                    | 类似match_phrase query，添加允许最后一个术语前缀匹配
+                    | GET /_search { "query": { "match_phrase_prefix": "xxx": { "query": "this is text"} } }
+                | 多字段匹配检索: multi_match query
+                    | 在多个字段上执行相同的查询
+                    | 支持字段名的模糊匹配，使用^boost可以为单个字段提升权重，使用"operator":"and"指定所有字段都必须包含
+                    | GET /_search { "query": {"multi_match": { "query": "this is text", "fields" : ["xxx1", "xxx2"] } } }
+                | 字符串检索: query_string
+                    | 使用查询解析器解析查询内容: "this AND that OR thus", 文本按照运算符分割， 每个文本部分独立分析
+                    | GET /_search
+                      {
+                          "query": {
+                              "query_string" : {
+                                  "default_field" : "content",  // "fields" : ["content", "name"],
+                                  "query" : "(new york city) OR (big apple)"
+                              }
+                          }
+                      }
+                    | 支持通配符、正则表达式、同义词("auto_generate_synonyms_phrase_query")搜索、Fuzziness模糊查询(valu~1)
+                    | 支持 "_exist_": "value"
+                | 简化字符串检索: simple_query_string
+                    | 使用SimpleQueryParser解析其上下文
+                    | 不抛出异常，丢弃无效的查询部分
+                    | 支持 +(表示AND)、|(表示OR)、-(表示否定)、*(在术语结束时表示前缀查询)、括号表示优先
+
+        | 复合查询
+
+        | Joining检索
+
+        | GEO检索
+
+        | 指定检索
+
+        | 跨度检索
