@@ -3,7 +3,8 @@ Linux
     | touch file 更改文件的最后更新时间
     | stat file 显示文件信息
     | ls -ah 查看文件目录, 显示隐藏文件
-
+    | cp 复制拷贝
+    | scp 远程拷贝
 
 
 

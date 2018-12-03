@@ -45,7 +45,7 @@ Git项目管理
         -> 当前分支HEAD: 指向current branch
     | git reflog 查看版本历史
 
-    | git status 查看仓库当前状态
+    | git status 查看仓库当前状态(所有修改文件、冲突位置等)
     | git diff [HEAD -- ] file 查看文件的修改内容
     | git checkout -- file 丢弃file文件在Stage区的修改
           -> 必须有--(否则是切换分支), 回到最近一次get commit/add时的状态, 工作区修改也被回退
@@ -60,14 +60,19 @@ Git项目管理
 
     | git rm file 从版本库中删除文件(需要commit)
 
-    | git clone path 克隆仓库
+    | git clone path 克隆仓库(可以使用https路径、git协议(SSH))
     | git checkout HEAD~ files 检出最新文件
         -> git checkout -- file 用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”
 
-    | git branch 列出当前所有的本地分支
-    | git checkout -b newBranch 新建一个分支并切换到它
+>> 分支管理
+    | git branch 列出当前所有的本地分支(加*表示当前分支)
+    | git checkout -b newBranch 新建一个分支并切换到它(等价于 git branch dev + git checkout dev)
     | git branch -m name1 name2 将name1分支改为name2
     | git branch -d name 删除name分支
+
+    | git merge newBranch 在master主分支执行合并
+    | 解决冲突 git merge后冲突的文件已经被修改, 需要手动打开进行取舍，然后再添加并提交
+    | git log --graph --pretty=oneline --abbrev-commit 查看分支合并情况/
 
 
 >> 远程仓库
@@ -78,22 +83,29 @@ Git项目管理
     | git remote rm name 删除本地的远程仓库
 
     | git push -u origin master 推送本地的master分支到远程的origin上
-        -> -u参数: 将本地的master分支和远程的master分支关联起来(以后可以简化命令)
-    | git push origin:issue2 删除远程origin上面提交的临时分支issue3
+        -> -u参数: 将本地的master分支和远程的master分支(upstream)关联起来(以后可以简化命令)
+    | upstream和downstream: 远程仓库的分支和本地分支
+    | git branch --set-upstream-to=origin/<branch> local_branch 指定本地分支的上行分支(或者git push --set-upstream origin develop)
 
-    | git clone gitPath 克隆一个本地库
-    |
-
-
+    | git push origin:issue2 删除远程origin上面提交的临时分支issue2
 
     | git fetch origin -> git merge origin/master 更新合并远程仓库的最新代码索引
-    | git pull origin master 直接更新合并最新的分支代码
+    | git pull origin master 直接更新合并最新的分支代码(等价于fetch + merge)
+
     | git mergetool --tool=xxxx 合并冲突解决工具
     | git merge master/other
+    | git merge --no-off -m "ccc" branch 禁用fast forward，合并时会创建新的commit
 
+>> 标签
     | git tag 查看当前所有标签
     | git tag -a v1.0 [-m 'comment'] 标记当前分支为v1.0版本并归档
     | git tag -l 'v1.*' 查看1.0版本下有多少小版本
+
+
+>> 使用实践经验
+    | master分支应当是稳定版本，用于发布新版本，一般在分支上开发
+    | 建立dev分支用于开发，发布版本时将dev合并到master (远程?)
+    | 每个开发人员建立自己的分支, 定时向dev分支合并
 
 
 >> commit前必须先add, 每一次更改都需要重新add file(增加的是修改部分), 可以一次commit多个修改
