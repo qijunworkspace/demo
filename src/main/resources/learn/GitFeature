@@ -69,7 +69,7 @@ Git项目管理
     | git branch -m name1 name2 将name1分支改为name2
     | git branch -d name 删除name分支，-D表示强制删除
 
-    | git merge newBranch 在master主分支执行合并
+    | git merge newBranch 在master主分支执行合并(先切换到需要合并的分支, 切换前需要把所有工作区和暂存区的提交)
     | 解决冲突 git merge后冲突的文件已经被修改, 需要手动打开进行取舍，然后再添加并提交
     | git log --graph --pretty=oneline --abbrev-commit 查看分支合并情况/
 
@@ -141,7 +141,7 @@ Git项目管理
     -> git check-ignore -v fileName 查看文件在哪里被忽略
 
 
->> Markdown
+>>
 
 
 
