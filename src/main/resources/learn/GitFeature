@@ -34,11 +34,10 @@ Git项目管理
           |                          |                        |           #             |
 
 
->> Git: 分布式、速度快、branch灵活、可以跟踪文件的修改而非文件
+>> Git: 分布式、速度快、branch灵活、跟踪文件的修改而非文件
 
 
 >> 本地管理
-    | git config --global key value 全局配置
     | git init 本地创建仓库
         -> 工作目录 Working Directory: 实际文件位置
         -> 缓存/暂存区 Stage(Index): 下一次需要提交的文件
@@ -60,7 +59,7 @@ Git项目管理
 
     | git rm file 从版本库中删除文件(需要commit)
 
-    | git clone path 克隆仓库(可以使用https路径、git协议(SSH))
+    | git clone path 克隆仓库(可以使用https路径、git协议(SSH)),默认情况下只能看到master分支
     | git checkout HEAD~ files 检出最新文件
         -> git checkout -- file 用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”
 
@@ -68,22 +67,27 @@ Git项目管理
     | git branch 列出当前所有的本地分支(加*表示当前分支)
     | git checkout -b newBranch 新建一个分支并切换到它(等价于 git branch dev + git checkout dev)
     | git branch -m name1 name2 将name1分支改为name2
-    | git branch -d name 删除name分支
+    | git branch -d name 删除name分支，-D表示强制删除
 
     | git merge newBranch 在master主分支执行合并
     | 解决冲突 git merge后冲突的文件已经被修改, 需要手动打开进行取舍，然后再添加并提交
     | git log --graph --pretty=oneline --abbrev-commit 查看分支合并情况/
 
+    | git stash 将当前工作现场暂存
+    | git stash list 查看暂存工作现场
+    | git stash apply+drop / pop
+
 
 >> 远程仓库
     | git remote add bName/origin gitPath 设置本地仓库关联对应的远程仓库
         -> git remote add origin git@github.com:qijunworkspace/demo.git
-    | git remote -v 查看本地的远程仓库
+    | git remote [-v] 查看本地的远程仓库
     | git remote rename name1 name2 改名本地远程仓库
     | git remote rm name 删除本地的远程仓库
 
     | git push -u origin master 推送本地的master分支到远程的origin上
         -> -u参数: 将本地的master分支和远程的master分支(upstream)关联起来(以后可以简化命令)
+
     | upstream和downstream: 远程仓库的分支和本地分支
     | git branch --set-upstream-to=origin/<branch> local_branch 指定本地分支的上行分支(或者git push --set-upstream origin develop)
 
@@ -96,16 +100,26 @@ Git项目管理
     | git merge master/other
     | git merge --no-off -m "ccc" branch 禁用fast forward，合并时会创建新的commit
 
->> 标签
+>> 标签(带有唯一名称的commit)
     | git tag 查看当前所有标签
-    | git tag -a v1.0 [-m 'comment'] 标记当前分支为v1.0版本并归档
+    | git tag tagName [commit_id] 新建标签
+    | git tag -a v1.0 [-m 'comment'] 标记当前分支为v1.0版本并添加说明
     | git tag -l 'v1.*' 查看1.0版本下有多少小版本
+    | git tag -d v0.1 删除标签(默认存储在本地)
+    | git push origin v1.0 推送标签到远程(删除时需要本地和远程都进行操作)
 
 
->> 使用实践经验
+>> 使用实践经验总结
     | master分支应当是稳定版本，用于发布新版本，一般在分支上开发
-    | 建立dev分支用于开发，发布版本时将dev合并到master (远程?)
+    | 建立dev分支用于开发，发布版本时将dev合并到master
+        -> git checkout -b dev origin/dev 建立分支并与远程分支对应
+        -> git push origin dev 向远程推送dev分支
+        -> git branch --set-upstream dev origin/dev 将本地dev分支与远程origin/dev分支关联
+        -> git pull origin/dev dev 拉取远程分支的内容
+        -> 手动解决冲突后，再push到远程仓库 git push origin/dev dev
     | 每个开发人员建立自己的分支, 定时向dev分支合并
+    | 开发新的feature最好新建分支
+    | master和dev分支需要和远程时刻同步，其他分支视情况而定
 
 
 >> commit前必须先add, 每一次更改都需要重新add file(增加的是修改部分), 可以一次commit多个修改
@@ -114,6 +128,20 @@ Git项目管理
    -> 回退版本时, 仅会将HEAD的指向改变, 然后更新 工作区的文件
    -> 创建Git版本库时, Git自动为我们创建了唯一个master分支
    -> origin是远程库的默认名称
+
+
+>> 定制Git: git config --global key value 全局配置
+    -> git config --global color.ui true 设置git显示颜色
+    -> git config --global user.name qijun
+    -> git config --global user.email qijunworkspace@163.com
+    -> 别名 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+
+>> 忽略特殊文件: .gitignore (忽略操作系统自动生成的文件、编译生成的中间文件、可执行文件、敏感信息的配置文件如数据库)
+    -> git check-ignore -v fileName 查看文件在哪里被忽略
+
+
+>> Markdown
 
 
 

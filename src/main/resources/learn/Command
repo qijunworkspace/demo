@@ -5,6 +5,8 @@ Linux
     | ls -ah 查看文件目录, 显示隐藏文件
     | cp 复制拷贝
     | scp 远程拷贝
+    | chown -R git:git sample.git 修改文件所有人
+
 
 
 
