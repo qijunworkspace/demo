@@ -22,7 +22,7 @@ Git项目管理
           |                          |                        |           #             |
           |                          |                        |           #             |
           |                          |                        |           #             |
-          |                          |                        |       git fetch         |
+          |                          |                        |       git pull          |
           |                          |                        | <---------------------  |
           |                          |                        |           #             |
           |                     git checkout                  |           #             |
@@ -32,7 +32,10 @@ Git项目管理
           | <-----------------------------------------------  |           #             |
           |                          |                        |           #             |
           |                          |                        |           #             |
-
+    +++++++++++++               +++++++++++              +++++++++++      #        +++++++++++
+    * Working   +               + Staging +              +  Local  +      #        +  Remote +
+    * Directory +               + Area    +              +  Repo   +      #        +  Repo   +
+    +++++++++++++               +++++++++++              +++++++++++      #        +++++++++++
 
 >> Git: 分布式、速度快、branch灵活、跟踪文件的修改而非文件
 
@@ -48,23 +51,23 @@ Git项目管理
     | git diff [HEAD -- ] file 查看文件的修改内容
     | git checkout -- file 丢弃file文件在Stage区的修改
           -> 必须有--(否则是切换分支), 回到最近一次get commit/add时的状态, 工作区修改也被回退
-    |git checkout branch/tag 切换版本/标签
+
     | git reset HEAD file 把暂存区的修改撤销, 并重新放回工作区(修改还在工作区)
           -> git reset 既可以回退版本, 也可以把暂存区的修改回退工作区
     | git reset --soft[hard] HEAD~2 回退到倒数第二个commit(版本回退)
 
     | git add filename 增加文件到仓库
     | git commit -m "comment" 提交必须注释
-    | git log [--graph] [--oneline] 查看最近3次详细提交修改内容
-        | 版本号commit id由SHA1计算, reset时可以填写前面部分, git自动查询符合的
+
 
     | git rm file 从版本库中删除文件(需要commit)
 
-    | git clone path 克隆仓库(可以使用https路径、git协议(SSH)),默认情况下只能看到master分支
+
     | git checkout HEAD~ files 检出最新文件
         -> git checkout -- file 用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”
 
 >> 分支管理
+    |git checkout branch/tag 切换版本/标签
     | git branch 列出当前所有的本地分支(加*表示当前分支)
     | git checkout -b newBranch 新建一个分支并切换到它(等价于 git branch dev + git checkout dev)
     | git branch -m name1 name2 将name1分支改为name2
@@ -75,8 +78,6 @@ Git项目管理
     | git rebase branch 合并branch分支到当前分支，类似merge
 
 
-    | git log --graph --pretty=oneline --abbrev-commit 查看分支合并情况/
-
     | git stash 将当前工作现场暂存（当前修改没有完成，这时切换版本前需要将现场保存）
     | git stash list 查看暂存工作现场
     | git stash apply+drop / pop
@@ -84,6 +85,7 @@ Git项目管理
 
 
 >> 远程仓库
+| git clone path 克隆仓库(可以使用https路径、git协议(SSH)),默认情况下只能看到master分支
     | git remote add bName/origin gitPath 设置本地仓库关联对应的远程仓库
         -> git remote add origin git@github.com:qijunworkspace/demo.git (Origin是本地给远程仓库起的名字)
     | git remote [-v] 查看本地的远程仓库
@@ -101,6 +103,7 @@ Git项目管理
     | git fetch origin -> git merge origin/master 更新合并远程仓库的最新代码索引
     | git pull origin master 直接更新合并最新的分支代码(等价于fetch + merge)
 
+| git push origin v1.0 推送标签到远程(删除时需要本地和远程都进行操作)
     | git mergetool --tool=xxxx 合并冲突解决工具
     | git merge master/other
     | git merge --no-off -m "ccc" branch 禁用fast forward，合并时会创建新的commit
@@ -111,20 +114,25 @@ Git项目管理
     | git tag -a v1.0 [-m 'comment'] 标记当前分支为v1.0版本并添加说明
     | git tag -l 'v1.*' 查看1.0版本下有多少小版本
     | git tag -d v0.1 删除标签(默认存储在本地)
-    | git push origin v1.0 推送标签到远程(删除时需要本地和远程都进行操作)
+
 
 
 >> 使用实践经验总结
     | master分支应当是稳定版本，用于发布新版本，一般在分支上开发
-    | 建立dev分支用于开发，发布版本时将dev合并到master
+    | 建立dev分支用于开发，发布版本时将dev合并到master，dev表示最新的开发状态
+    | Git git Flow大型团队合作再添加 feature(开发新功能)\release(基于dev的用于发布版本的测试分支)\hotfix(修复master上的问题) 三大分支
         -> git checkout -b dev origin/dev 建立分支并与远程分支对应
-        -> git push origin dev 向远程推送dev分支
+        -> git push origin dev 向远程推送dev分支(远程将新建dev分支)
         -> git branch --set-upstream dev origin/dev 将本地dev分支与远程origin/dev分支关联
         -> git pull origin/dev dev 拉取远程分支的内容
         -> 手动解决冲突后，再push到远程仓库 git push origin/dev dev
+        -> git branch -r 查看远程分支列表
+        -> git checkout -b dev origin/dev 将远程的dev分支迁到本地并切换到该分支
     | 每个开发人员建立自己的分支, 定时向dev分支合并
     | 开发新的feature最好新建分支
     | master和dev分支需要和远程时刻同步，其他分支视情况而定
+    | git branch --merged 查看所有合并到当前分支的分支列表
+    | git branch --no-merge 查看所有没有合并到当前分支的分支列表
 
 
 >> commit前必须先add, 每一次更改都需要重新add file(增加的是修改部分), 可以一次commit多个修改
