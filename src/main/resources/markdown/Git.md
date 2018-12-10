@@ -23,7 +23,7 @@
           |                          |                        |           #             |
           |                          |                        |           #             |
           |                          |                        |           #             |
-          |                          |                        |       git pull          |
+          |                          |                        |    git pull/fetch       |
           |                          |                        | <---------------------  |
           |                          |                        |           #             |
           |                     git checkout                  |           #             |
@@ -68,5 +68,57 @@
 + `git branch -m name newName` 修改分支名称
 + `git branch -d name` 删除分支，-D表示强制删除
 + `git branch --merged/--no-merged` 查看已经/尚未合并到当前分支的所有分支名称
-+ `git merge otherBranch` 将otherBranch合并到当前分支
-+ `git merge origin/master <branch> --no-off` 将两个分支合并，不使用Fast-Forword模式， 会创建commit
++ `git merge otherBranch [--no-ff]` 将otherBranch合并到当前分支(--no-ff表示不使用Fast-Forward快进合并模式, 会生成merge提交)
++ `git merge origin/master` 合并远程分支到当前分支
++ `git rebase master <branch>` 合并branch分支到master分支
++ `git tag` 查看当前版本库中所有标签(标签用于固化提交版本，带有唯一名称)
++ `git tag tagName [commit_id]` 新建标签，commit_id表示指定提交版本号
++ `git tag -a v1.0 [-m 'comment']` 标记当前分支为1.0版本并添加注释
++ `git tag -l 'v1.*'` 查看1.0版本下有多少小版本
++ `git tag -d v0.1` 删除本地标签信息
++ `git stash` 将当前工作现场保存(当前修改没有完成时，在切换其他版本前将现场保存)
++ `git stash list` 查看所有暂存的工作现场
++ `git stash apply id -> git stash drop id` 取回工作现场并删除
++ `git stash pop` 取回工作现场并删除
++ `git stash clear` 清空暂存队列
+
+### 4. 远程仓库操作命令
++ `git clone path` 克隆仓库，可以使用https协议或git协议(ssh)，默认克隆master分支
++ `git remote -v` 查看远程服务器地址和仓库名称
++ `git remote show origin` 查看远程服务器的仓库状态
++ `git remote add origin git@github.com:qijunworkspace/demo.git` 添加远程仓库地址
++ `git remote rm name` 删除本地记录的远程仓库
++ `git pull [--no-ff] [origin <remoteBranch>:<localBranch>]` 获取远程仓库所有分支更新并合并到本地当前分支，等价于fetch+merge
++ `git fetch origin master` 获取远程仓库origin的master分支更新
++ `git checkout --track origin/branch` 跟踪某个远程分支并创建同名的本地分支
++ `git checkout -b <localBranch> origin/<remoteBranch>` 跟踪某个远程分支并创建指定的本地分支
++ `git push origin master` 将本地主分支推送到远程主分支
++ `git push -u origin branch` 将本地master或dev分支推送到远程仓库(建立track关系)，远程分支没有分支时将创建，-u用于指定默认upstream
++ `git push --set-upstream origin develop` 指定develop分支的upstream, 同上
++ `git branch --set-upstream-to=origin/develop develop ` 设置本地库和远程库的跟踪关系
++ `git push origin <localBranch>:<remoteBranch>` 创建远程分支
++ `git push origin :<remote_branch>` 删除本地分支后，执行此命令再删除远程分支
+
+### 5. 配置Git环境
++ `git config --global color.ui true` 设置显示颜色
++ `git config --global user.name qijun` 设置用户信息
++ `git config --global user.email qijunworkspace@163.com` 设置用户信息
++ `git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"` 设置日志样式
++ `git check-ignore -v file`  查看文件为什么被忽略
+
+### 6. 实践总结
++ 文件修改必须add到暂存区后再统一执行commit, git记录的是修改信息
++ commit自动串成一条时间线，HEAD表示当前版本，HEAD^^及HEAD~2表示往上回溯两个版本
++ 版本回退时，仅改变HEAD的指向，然后更新工作区的文件
++ 创建版本库时，Git自动创建一个*master分支*，一般使用*origin*作为远程库的名称
++ master分支对应稳定版本，一般在dev分支上进行开发，发布版本时合并到master分支，dev分支表示最新开发状态
++ 大型团队开发使用Git Flow工具，添加Feature分支、Release分支及Hotfix分支
++ 每个开发人员建立自己的分支(本地)，定期向dev分支合并
+> `git checkout -b dev origin/dev` 建立分支并与远程分支对应  
+> `git push origin dev` 向远程推送dev分支  
+> `git push --set-upstream dev origin/dev` 将本地dev分支与远程origin/dev分支关联  
+> `git pull origin/dev dev` 拉取远程分支的内容  
+> `git push origin/dev dev` 推送dev分支到远程  
+> `git branch -r` 查看远程分支  
+> `git checkout -b dev origin/dev` 将远程的分支迁移到本地并切换到该分支  
+
