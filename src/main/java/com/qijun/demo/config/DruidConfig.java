@@ -22,6 +22,7 @@ public class DruidConfig {
 
     /**
      * 配置数据源 Druid DataSource
+     * 数据源会自动注入到Mybatis的 sqlSessionFactory中，用于mapper的处理
      * @return
      */
     @Bean(destroyMethod = "close", initMethod = "init")

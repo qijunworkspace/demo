@@ -22,8 +22,14 @@
 		<typeAlias alias="LinkedHashMap" type="java.util.LinkedHashMap" />
 		<typeAlias alias="ArrayList" type="java.util.ArrayList" />
 		<typeAlias alias="LinkedList" type="java.util.LinkedList" />
+		<package name="com.qijun.demo.model"/>
 	</typeAliases>
 
+
+	<typeHandlers>
+		<!--对于枚举类型，使用整型值存储-->
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="java.math.RoundingMode"/>
+	</typeHandlers>
 
 	<!-- 配置环境：可以配置多个环境，default：配置某一个环境的唯一标识，表示默认使用哪个环境
 	<environments default="development">

@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //等价于开启 @Configuration @ComponentScan @EnableAutoConfiguration
 @SpringBootApplication
 //指定扫锚路径
-@MapperScan("com.qijun.demo")
+@MapperScan("com.qijun.demo.mapper")
 public class DemoApplication {
 
 	public static void main(String[] args) {
