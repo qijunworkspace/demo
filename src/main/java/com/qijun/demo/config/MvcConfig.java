@@ -24,6 +24,7 @@ public class MvcConfig implements WebMvcConfigurer {
      * 添加拦截器
      * @param registry
      */
+    @Override
     public void addInterceptors(InterceptorRegistry registry){
     }
 
@@ -31,6 +32,7 @@ public class MvcConfig implements WebMvcConfigurer {
      * 跨域访问配置
      * @param registry
      */
+    @Override
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
                 // 允许跨域请求中携带cookie
@@ -44,6 +46,7 @@ public class MvcConfig implements WebMvcConfigurer {
      * 添加格式化工具
      * @param registry
      */
+    @Override
     public void addFormatters(FormatterRegistry registry){
     }
 
@@ -51,6 +54,7 @@ public class MvcConfig implements WebMvcConfigurer {
      * 添加静态资源处理器
      * @param registry
      */
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         //添加swagger静态资源的支持
         registry.addResourceHandler("/swagger-ui.html")
@@ -72,6 +76,7 @@ public class MvcConfig implements WebMvcConfigurer {
      * 可从controller中设置返回
      * @param registry
      */
+    @Override
     public void addViewControllers(ViewControllerRegistry registry){
         //设置主页(默认可不设置)
         registry.addViewController("/").setViewName("index.html");
@@ -82,6 +87,7 @@ public class MvcConfig implements WebMvcConfigurer {
      * 可添加异常对应跳转视图
      * @param resolvers
      */
+    @Override
     public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers){
     }
 }

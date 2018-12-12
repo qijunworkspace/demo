@@ -27,8 +27,6 @@ public interface PermissionMapper {
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=true, resultType=Integer.class)
     int insert(Permission record);
 
-    int insertSelective(Permission record);
-
     @Select({
         "select",
         "id, permission, type, description",
@@ -38,7 +36,6 @@ public interface PermissionMapper {
     @ResultMap("com.qijun.demo.mapper.PermissionMapper.BaseResultMap")
     Permission selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Permission record);
 
     @Update({
         "update permission",
@@ -48,4 +45,9 @@ public interface PermissionMapper {
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Permission record);
+
+
+    int insertSelective(Permission record);
+
+    int updateByPrimaryKeySelective(Permission record);
 }

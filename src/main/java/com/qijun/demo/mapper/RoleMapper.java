@@ -27,8 +27,6 @@ public interface RoleMapper {
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=true, resultType=Integer.class)
     int insert(Role record);
 
-    int insertSelective(Role record);
-
     @Select({
         "select",
         "id, role, description",
@@ -38,7 +36,7 @@ public interface RoleMapper {
     @ResultMap("com.qijun.demo.mapper.RoleMapper.BaseResultMap")
     Role selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Role record);
+
 
     @Update({
         "update role",
@@ -47,4 +45,8 @@ public interface RoleMapper {
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Role record);
+
+    int insertSelective(Role record);
+
+    int updateByPrimaryKeySelective(Role record);
 }

@@ -31,8 +31,6 @@ public interface UserMapper {
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=true, resultType=Integer.class)
     int insert(User record);
 
-    int insertSelective(User record);
-
     @Select({
         "select",
         "id, username, password, email, telephone, portrait, status, regist_time",
@@ -41,8 +39,6 @@ public interface UserMapper {
     })
     @ResultMap("com.qijun.demo.mapper.UserMapper.BaseResultMap")
     User selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(User record);
 
     @Update({
         "update user",
@@ -56,4 +52,8 @@ public interface UserMapper {
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(User record);
+
+    int insertSelective(User record);
+
+    int updateByPrimaryKeySelective(User record);
 }

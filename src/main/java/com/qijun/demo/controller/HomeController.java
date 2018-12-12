@@ -3,6 +3,7 @@ package com.qijun.demo.controller;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @ClassName DruidConfig
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
  * @Version 1.0
  */
 @Controller
+@RequestMapping("/view")
 public class HomeController {
 
     private Log log = LogFactory.getLog(HomeController.class);
