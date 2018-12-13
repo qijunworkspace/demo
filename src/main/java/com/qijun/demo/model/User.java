@@ -6,20 +6,21 @@ import java.util.Date;
  * 用户表
  */
 public class User {
+    //主键
     private Integer id;
-
+    //用户名
     private String username;
-
+    //密码
     private String password;
-
+    //邮箱
     private String email;
-
+    //联系电话
     private String telephone;
-
+    //头像地址
     private String portrait;
-
+    //状态
     private Integer status;
-
+    //注册时间
     private Date registTime;
 
     public Integer getId() {
