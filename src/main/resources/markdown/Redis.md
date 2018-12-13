@@ -40,6 +40,7 @@
 - `psubscribe key*/key?/key[123]` 订阅符合模式的键消息
 
 ### 4.Springboot集成
+- SpringBoot2.X默认采用lettuce，而1.5默认采用的是jdeis
 - RedisTemplate默认使用JDK序列化
 - RedisConnection用于低级别(byte数组)的Redis API操作，具体使用JRedis或Lettuce(LettuceConnectionFactory)
 - 实现MessageListenerAdapter可注册在RedisMessageListenerContainer实现指定键值消息监听

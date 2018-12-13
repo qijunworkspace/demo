@@ -2,6 +2,7 @@ package com.qijun.demo;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,13 @@ import org.springframework.test.context.junit4.SpringRunner;
  * 必须指明springboot启动环境RANDOM_PORT，否则提示ES netty错误
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {DemoApplication.class}, webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DemoApplicationTests {
+
+	@BeforeClass
+	public static void init(){
+		System.setProperty("es.set.netty.runtime.available.processors", "false");
+	}
 
 	@LocalServerPort
 	private int port;
