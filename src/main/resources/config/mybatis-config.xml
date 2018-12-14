@@ -44,7 +44,7 @@
 		</environment>
 	</environments> -->
 
-	<!--数据库映射-->
+	<!--数据库映射接口位置-->
 	<mappers>
 		<package name="com.qijun.demo.mapper"></package>
 	</mappers>

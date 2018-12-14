@@ -11,18 +11,17 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @ClassName MvcConfig
- * @Description 全局定制MVC特性(实现接口定义)
- * @Author Qijun
- * @Date 11/27/18 2:04 PM
- * @Version 1.0
+ * 全局定制MVC特性(实现接口定义)
+ * @author Qijun
+ * @date 11/27/18 2:04 PM
+ * @version 1.0
  */
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
     /**
      * 添加拦截器
-     * @param registry
+     * @param registry 拦截注册器
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry){
@@ -30,7 +29,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     /**
      * 跨域访问配置
-     * @param registry
+     * @param registry 跨域注册器
      */
     @Override
     public void addCorsMappings(CorsRegistry registry){
@@ -44,7 +43,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     /**
      * 添加格式化工具
-     * @param registry
+     * @param registry 格式化注册器
      */
     @Override
     public void addFormatters(FormatterRegistry registry){
@@ -52,7 +51,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     /**
      * 添加静态资源处理器
-     * @param registry
+     * @param registry 静态资源注册器
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
@@ -74,7 +73,7 @@ public class MvcConfig implements WebMvcConfigurer {
     /**
      * 添加URI到视图的映射
      * 可从controller中设置返回
-     * @param registry
+     * @param registry 视图跳转注册器
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry){
@@ -85,7 +84,7 @@ public class MvcConfig implements WebMvcConfigurer {
     /**
      * 扩展异常处理器
      * 可添加异常对应跳转视图
-     * @param resolvers
+     * @param resolvers 异常处理解析器
      */
     @Override
     public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers){

@@ -1,3 +1,6 @@
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
 #创建用户表
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`(
@@ -10,7 +13,7 @@ CREATE TABLE `user`(
   `status` INT(2) DEFAULT 0 COMMENT '帐户状态: 0-待审核 1-正常 2-锁定',
   `regist_time` DATE DEFAULT NULL COMMENT '注册时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 CHARACTER SET=utf8 COLLATE=utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ROW_FORMAT = Compact;
 
 #创建角色表
 DROP TABLE IF EXISTS `role`;
@@ -19,7 +22,7 @@ CREATE TABLE `role`(
   `role` VARCHAR(255) NOT NULL COMMENT '角色名称',
   `description` VARCHAR(255) DEFAULT NULL COMMENT '描述信息',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 CHARACTER SET=utf8 COLLATE=utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ROW_FORMAT = Compact;
 
 #创建权限表
 DROP TABLE IF EXISTS `permission`;
@@ -29,7 +32,7 @@ CREATE TABLE `permission`(
   `type` INT(2) NOT NULL COMMENT '权限类型: 0-菜单，1-方法',
   `description` VARCHAR(255) DEFAULT NULL COMMENT '描述信息',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 CHARACTER SET=utf8 COLLATE=utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COLLATE=utf8_general_ci ROW_FORMAT = Compact;
 
 
 #设置用户角色关联表
@@ -43,7 +46,7 @@ CREATE TABLE `user_role` (
   KEY `fk_user_role_user_1` (`user_id`),
   CONSTRAINT `fk_user_role_role_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_user_role_user_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-);
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COLLATE=utf8_general_ci ROW_FORMAT = Compact;
 
 #设置用户角色关联表
 DROP TABLE IF EXISTS `role_permission`;
@@ -56,8 +59,7 @@ CREATE TABLE `role_permission` (
   KEY `fk_role_permission_permission_1` (`permission_id`),
   CONSTRAINT `fk_role_permission_role_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_role_permission_permission_1` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8  COLLATE=utf8_general_ci ROW_FORMAT = Compact;
 
 
 #设置检查外键

@@ -9,11 +9,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 /**
- * @ClassName DruidConfig
- * @Description 配置数据库连接池 开启事务支持
- * @Author Qijun
- * @Date 11/23/18 3:17 PM
- * @Version 1.0
+ * 配置数据库连接池 开启事务支持
+ * @author Qijun
+ * @date 11/23/18 3:17 PM
+ * @version 1.0
  */
 @Configuration
 @EnableTransactionManagement
@@ -23,13 +22,12 @@ public class DruidConfig {
     /**
      * 配置数据源 Druid DataSource
      * 数据源会自动注入到Mybatis的 sqlSessionFactory中，用于mapper的处理
-     * @return
+     * @return druid 数据源
      */
     @Bean(destroyMethod = "close", initMethod = "init")
     @ConfigurationProperties(prefix="spring.datasource")
     public DruidDataSource druidDataSource() {
-        DruidDataSource source = new DruidDataSource();
-        return source;
+        return new DruidDataSource();
     }
 
     //HikariCP性能最强

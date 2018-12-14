@@ -7,11 +7,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
- * @ClassName DruidConfig
- * @Description 配置用户登录信息 使用Spring-Security
- * @Author Qijun
- * @Date 11/23/18 3:17 PM
- * @Version 1.0
+ * 配置用户登录信息 使用Spring-Security
+ * @author Qijun
+ * @date 11/23/18 3:17 PM
+ * @version 1.0
  */
 @Configuration
 @EnableWebSecurity

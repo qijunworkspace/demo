@@ -9,11 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import java.text.SimpleDateFormat;
 
 /**
- * @ClassName GeneralConfig
- * @Description 通用自定义配置
- * @Author Qijun
- * @Date 11/28/18 2:13 PM
- * @Version 1.0
+ * 通用自定义配置
+ * @author Qijun
+ * @date 11/28/18 2:13 PM
+ * @version 1.0
  */
 @Configuration
 public class GeneralConfig {
@@ -21,7 +20,7 @@ public class GeneralConfig {
     /**
      * Springboot默认使用Jackson实现序列化
      * 自定序列化格式, 返回JSON时自动应用
-     * @return
+     * @return 对象序列化器
      */
     @Bean
     public ObjectMapper getObjectMapper(){

@@ -21,24 +21,27 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.lang.reflect.Method;
 
 /**
- * @ClassName CacheConfig
- * @Description 配置Spring的缓存管理
- * @Author Qijun
- * @Date 12/13/18 11:19 AM
- * @Version 1.0
+ * 配置Spring的缓存管理
+ * @author Qijun
+ * @date 12/13/18 11:19 AM
+ * @version 1.0
  */
 @Configuration
 @EnableCaching
 public class CacheConfig extends CachingConfigurerSupport {
 
-    @Autowired
     private LettuceConnectionFactory lettuceConnectionFactory;
-    @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    public CacheConfig(LettuceConnectionFactory lettuceConnectionFactory, ObjectMapper objectMapper){
+        this.lettuceConnectionFactory = lettuceConnectionFactory;
+        this.objectMapper = objectMapper;
+    }
 
     /**
      * 自定义缓存管理器(redis实现)
-     * @return
+     * @return Springboot缓存管理器
      */
     @Override
     @Bean
@@ -55,9 +58,8 @@ public class CacheConfig extends CachingConfigurerSupport {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer));
 
         //生成含有默认配置信息的缓存管理器
-        RedisCacheManager cacheManager = RedisCacheManager.RedisCacheManagerBuilder
+        return RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(lettuceConnectionFactory).cacheDefaults(configuration).build();
-        return cacheManager;
     }
 
     @Override
@@ -67,22 +69,21 @@ public class CacheConfig extends CachingConfigurerSupport {
 
     /**
      * 未指定键值时，使用该对象生成
-     * @return
+     * lambda只能用于函数式接口
+     * @return 键生成器
      */
     @Override
     @Bean
     public KeyGenerator keyGenerator() {
-        return new KeyGenerator() {
-            @Override
-            public Object generate(Object target, Method method, Object... params) {
-                StringBuffer sb = new StringBuffer();
+
+        return (Object target,Method method, Object...params)->{
+                StringBuilder sb = new StringBuilder();
                 sb.append(target.getClass().getName());
                 sb.append(method.getName());
                 for (Object obj : params) {
                     sb.append(obj.toString());
                 }
                 return sb.toString();
-            }
         };
     }
 

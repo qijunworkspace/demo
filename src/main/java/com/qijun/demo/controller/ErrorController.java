@@ -5,11 +5,10 @@ import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.stereotype.Controller;
 
 /**
- * @ClassName ErrorController
- * @Description {配置需要确认}
- * @Author Qijun
- * @Date 11/28/18 11:36 AM
- * @Version 1.0
+ * 配置需要确认
+ * @author Qijun
+ * @date 11/28/18 11:36 AM
+ * @version 1.0
  */
 @Controller
 public class ErrorController extends AbstractErrorController{

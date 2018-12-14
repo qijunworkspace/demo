@@ -2,15 +2,30 @@ package com.qijun.demo.model;
 
 /**
  * 权限表
+ * @author Qijun
+ * @date 12/14/18 9:45 AM
+ * @version 1.0
  */
 public class Permission {
 
+    /**
+     * 主键
+     */
     private Integer id;
 
+    /**
+     * 权限名
+     */
     private String permission;
 
+    /**
+     * 权限类型： 0-menu 1-method
+     */
     private Integer type;
 
+    /**
+     * 描述信息
+     */
     private String description;
 
     public Integer getId() {

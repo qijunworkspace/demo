@@ -8,11 +8,10 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * @ClassName LocalRedisProperties
- * @Description 为了将redis的配置文件独立出来, 重写 RedisProperties 类
- * @Author Qijun
- * @Date 11/29/18 5:03 PM
- * @Version 1.0
+ * 为了将redis的配置文件独立出来, 重写 RedisProperties 类
+ * @author Qijun
+ * @date 11/29/18 5:03 PM
+ * @version 1.0
  */
 @Component
 @PropertySource(value = "classpath:config/redis.properties")

@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 /**
  * 
- * @ClassName ApplicationContextUtil.java
- * @Description 用于获取容器内的Bean
- * @Date Aug 27, 2018 8:49:54 AM
+ * 用于获取容器内的Bean
+ * @date Aug 27, 2018 8:49:54 AM
  * @author qijun
+ * @version 1.0
  */
 @Component
 public class ApplicationContextUtil implements ApplicationContextAware {
@@ -24,8 +24,8 @@ public class ApplicationContextUtil implements ApplicationContextAware {
 
 	/**
 	 * 按照变量实例名获取
-	 * @param name
-	 * @return
+	 * @param name 实例名
+	 * @return 对象
 	 */
 	public static Object getBean(String name){
 		return applicationContext.getBean(name);
@@ -33,8 +33,8 @@ public class ApplicationContextUtil implements ApplicationContextAware {
 	
 	/**
 	 * 按照类型获取
-	 * @param cls
-	 * @return
+	 * @param cls 实例类型
+	 * @return 对象
 	 */
 	public static <T> T getBean(Class<T> cls){
 		return applicationContext.getBean(cls);

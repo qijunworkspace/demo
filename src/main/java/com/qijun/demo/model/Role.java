@@ -1,15 +1,34 @@
 package com.qijun.demo.model;
 
+import java.util.List;
+
 /**
  * 角色表
+ * @author Qijun
+ * @date 12/14/18 9:45 AM
+ * @version 1.0
  */
 public class Role {
 
+    /**
+     * 主键
+     */
     private Integer id;
 
+    /**
+     * 角色
+     */
     private String role;
 
+    /**
+     * 描述
+     */
     private String description;
+
+    /**
+     * 权限列表
+     */
+    private List<Permission> permissions;
 
     public Integer getId() {
         return id;
@@ -35,6 +54,15 @@ public class Role {
         this.description = description == null ? null : description.trim();
     }
 
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -44,6 +72,7 @@ public class Role {
         sb.append(", id=").append(id);
         sb.append(", role=").append(role);
         sb.append(", description=").append(description);
+        sb.append(", permissions=").append(permissions);
         sb.append("]");
         return sb.toString();
     }

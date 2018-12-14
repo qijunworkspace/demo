@@ -4,24 +4,48 @@ import java.util.Date;
 
 /**
  * 用户表
+ * @author Qijun
+ * @date 12/14/18 9:45 AM
+ * @version 1.0
  */
 public class User {
-    //主键
+    /**
+     * 主键
+     */
     private Integer id;
-    //用户名
+    /**
+     * 用户名
+     */
     private String username;
-    //密码
+    /**
+     * 密码
+     */
     private String password;
-    //邮箱
+    /**
+     * 邮箱
+     */
     private String email;
-    //联系电话
+    /**
+     * 联系电话
+     */
     private String telephone;
-    //头像地址
+    /**
+     * 头像地址
+     */
     private String portrait;
-    //状态
+    /**
+     * 状态
+     */
     private Integer status;
-    //注册时间
+    /**
+     * 注册时间
+     */
     private Date registTime;
+
+    /**
+     * 用户对应的角色
+     */
+    private Role role;
 
     public Integer getId() {
         return id;
@@ -87,6 +111,14 @@ public class User {
         this.registTime = registTime;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -101,6 +133,7 @@ public class User {
         sb.append(", portrait=").append(portrait);
         sb.append(", status=").append(status);
         sb.append(", registTime=").append(registTime);
+        sb.append(", role=").append(role);
         sb.append("]");
         return sb.toString();
     }

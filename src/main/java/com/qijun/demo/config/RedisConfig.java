@@ -16,24 +16,26 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * @ClassName RedisConfig
- * @Description 配置Redis缓存
- * @Author Qijun
- * @Date 11/29/18 4:23 PM
- * @Version 1.0
+ * 配置Redis缓存
+ * @author Qijun
+ * @date 11/29/18 4:23 PM
+ * @version 1.0
  */
 @Configuration
 public class RedisConfig{
 
-    @Autowired
     private RedisProperties redisProperties;
-    @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    public RedisConfig(RedisProperties redisProperties, ObjectMapper objectMapper){
+        this.redisProperties = redisProperties;
+        this.objectMapper = objectMapper;
+    }
 
     /**
      * Lettuce客户端连接池配置(覆盖SpringBoot默认配置)
-     * @return
+     * @return lettuceClientConfiguration
      */
     @Bean
     public LettuceClientConfiguration lettuceClientConfiguration(){
@@ -45,16 +47,13 @@ public class RedisConfig{
         poolConfig.setMaxWaitMillis(redisProperties.getLettuce().getPool().getMaxWait().toMillis());
         poolConfig.setBlockWhenExhausted(true);
         //生成Lettuce连接池客户端配置
-        LettuceClientConfiguration lettucePoolingClientConfiguration =
-                LettucePoolingClientConfiguration.builder().commandTimeout(redisProperties.getTimeout()).poolConfig(poolConfig).build();
-
-        return lettucePoolingClientConfiguration;
+        return LettucePoolingClientConfiguration.builder().commandTimeout(redisProperties.getTimeout()).poolConfig(poolConfig).build();
     }
 
     /**
      * 配置Redis连接工厂(覆盖SpringBoot默认配置)
-     * @param lettuceClientConfiguration
-     * @return
+     * @param lettuceClientConfiguration 客户端配置
+     * @return lettuceConnectionFactory
      */
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory(LettuceClientConfiguration lettuceClientConfiguration){
@@ -64,18 +63,6 @@ public class RedisConfig{
         standaloneConfiguration.setHostName(redisProperties.getHost());
         standaloneConfiguration.setPassword(redisProperties.getPassword());
         standaloneConfiguration.setPort(redisProperties.getPort());
-
-        // 集群配置
-        // RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
-        // String[] serverArray = clusterNodes.split(",");
-        // Set<RedisNode> nodes = new HashSet<RedisNode>();
-        // for (String ipPort : serverArray) {
-        //    String[] ipAndPort = ipPort.split(":");
-        //    nodes.add(new RedisNode(ipAndPort[0].trim(), Integer.valueOf(ipAndPort[1])));
-        // }
-        // redisClusterConfiguration.setPassword(RedisPassword.of(password));
-        // redisClusterConfiguration.setClusterNodes(nodes);
-        // redisClusterConfiguration.setMaxRedirects(maxRedirects);
 
         //创建连接工厂
         LettuceConnectionFactory factory = new LettuceConnectionFactory(standaloneConfiguration, lettuceClientConfiguration);
@@ -88,8 +75,8 @@ public class RedisConfig{
 
     /**
      * 配置直接操作缓存的redisTemplate对象
-     * @param lettuceConnectionFactory
-     * @return
+     * @param lettuceConnectionFactory 连接工厂
+     * @return redisTemplate
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory){
