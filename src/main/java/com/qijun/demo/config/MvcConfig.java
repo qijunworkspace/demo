@@ -78,7 +78,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry){
         //设置主页(默认可不设置)
-        registry.addViewController("/").setViewName("index.html");
+        registry.addViewController("/").setViewName("/view/index");
     }
 
     /**

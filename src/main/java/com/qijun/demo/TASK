@@ -6,3 +6,29 @@
 6、引入通用异常处理
 7、mybatis
 8、Hibernate Validation
+9、Thymeleaf Metronic
+
+《基于Springboot2的web开发环境搭建》
+
+项目：获取股票交易数据-队列，缓存，存储，页面显示统计分析
+使用git作为代码管理工具
+--> 尝试引入Flink实现事件流处理
+
+1、基础环境配置说明
+前后端分离注意事项 - 权限、过滤器、静态资源查找
+2、集成SpringSecurity - 单点登录、前后端分离注意 -> 分布式session
+3、集成swagger2
+4、集成 netty websocket /Spring websocket 两者比较
+5、集成mybatis / Hibernate + druid
+6、集成logback/log4j
+7、集成elasticsearch - spring-data-elasticsearch(自定义插件引用)
+8、集成 Activiti/Spring Web Flow
+9、统一返回结果及异常处理
+10、集成Redis -分布式缓存、分布式session
+11、操作日志，AOP切片
+12、对外接口- 使用netty实现 TCP / UDP, RESTful
+13、JSP/ FreeMaker /Thymeleaf /VUE(ElementUI)
+14、集成Zookeeper、Kafka
+15、Nginx负载均衡，缓存（一致性hash、Hash桶）
+16、Https 安全管理
+I/O、Tomcat、JVM、多线程、Docker、Maven、数据库锁及高可用、 高质量代码性能优化、设计模式、项目管理总结

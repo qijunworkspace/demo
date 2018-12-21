@@ -17,4 +17,31 @@ public class ViewController {
 
     private Log log = LogFactory.getLog(ViewController.class);
 
+    /**
+     * 跳转登录页面
+     * @return path
+     */
+    @RequestMapping("login")
+    public String login(){
+        return "login";
+    }
+
+    /**
+     * 跳转主页面
+     * @return path
+     */
+    @RequestMapping("/home")
+    public String home(){
+        return "components/home";
+    }
+
+    /**
+     * 跳转个人信息页面
+     * @return path
+     */
+    @RequestMapping("/userProfile")
+    public String userProfile(){
+        return "components/user-profile";
+    }
+
 }

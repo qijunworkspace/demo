@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>左侧菜单栏</title>
+</head>
+<body>
+    <div th:fragment="menu">
+        <button class="m-aside-left-close  m-aside-left-close--skin-dark " id="m_aside_left_close_btn"><i class="la la-close"></i></button>
+        <div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark ">
+            <div id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark "
+                 m-menu-vertical="1" m-menu-scrollable="1" m-menu-dropdown-timeout="500" style="position: relative;">
+                <!-- 菜单列表 -->
+                <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
+                    <!-- 主页 -->
+                    <li id="home" class="m-menu__item  m-menu__item--active" aria-haspopup="true">
+                        <a href="#" class="m-menu__link ">
+                            <i class="m-menu__link-icon flaticon-rocket"></i>
+                            <span class="m-menu__link-title">
+                                <span class="m-menu__link-wrap">
+                                    <span class="m-menu__link-text">Presentation</span>
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+                    <!-- 系统管理 -->
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon flaticon-settings-1"></i>
+                            <span class="m-menu__link-text">Configuration</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <!-- 弹出菜单列表 -->
+                        <div class="m-menu__submenu ">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <!-- 父菜单? -->
+                                <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
+                                    <span class="m-menu__link">
+                                        <span class="m-menu__link-text">Configuration</span>
+                                    </span>
+                                </li>
+                                <!-- 用户信息 -->
+                                <li id="userProfile" class="m-menu__item " aria-haspopup="true">
+                                    <a href="@{/view/user}" class="m-menu__link ">
+                                        <i class="m-menu__link-icon flaticon-profile-1"></i>
+                                        <span class="m-menu__link-text">User Profile</span>
+                                    </a>
+                                </li>
+                                <!-- 操作日志 -->
+                                <li class="m-menu__item " aria-haspopup="true">
+                                    <a href="@{/view/log}" class="m-menu__link ">
+                                        <i class="m-menu__link-icon flaticon-folder-1"></i>
+                                        <span class="m-menu__link-text">Operation Log</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- 部署调整 -->
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon flaticon-interface-6"></i>
+                            <span class="m-menu__link-text">Development & Deploy</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu ">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <!-- 父菜单 -->
+                                <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
+                                    <span class="m-menu__link">
+                                        <span class="m-menu__link-text">Development & Deploy</span>
+                                    </span>
+                                </li>
+                                <!-- 字典项 -->
+                                <li class="m-menu__item " aria-haspopup="true">
+                                    <a th:href="@{/view/dictionary}" class="m-menu__link ">
+                                        <i class="m-menu__link-icon flaticon-interface-4"></i>
+                                        <span class="m-menu__link-text">Dictionary</span>
+                                    </a>
+                                </li>
+                                <!-- 国际化 -->
+                                <li class="m-menu__item " aria-haspopup="true">
+                                    <a th:href="@{/view/i18n}" class="m-menu__link ">
+                                        <i class="m-menu__link-icon flaticon-interface-4"></i>
+                                        <span class="m-menu__link-text">I18n</span>
+                                    </a>
+                                </li>
+                                <!-- 角色权限配置 -->
+                                <!-- 系统备份还原 -->
+                                <!-- 运行状态监控 -->
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
