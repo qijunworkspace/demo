@@ -14,11 +14,11 @@
                 <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
                     <!-- 主页 -->
                     <li id="home" class="m-menu__item  m-menu__item--active" aria-haspopup="true">
-                        <a href="#" class="m-menu__link ">
-                            <i class="m-menu__link-icon flaticon-rocket"></i>
+                        <a th:href="@{/home}" class="m-menu__link ">
+                            <i class="m-menu__link-icon flaticon-paper-plane"></i>
                             <span class="m-menu__link-title">
                                 <span class="m-menu__link-wrap">
-                                    <span class="m-menu__link-text">Presentation</span>
+                                    <span class="m-menu__link-text">Home</span>
                                 </span>
                             </span>
                         </a>
@@ -35,7 +35,7 @@
                             <span class="m-menu__arrow"></span>
                             <ul class="m-menu__subnav">
                                 <!-- 父菜单? -->
-                                <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
+                                <li id="configuration" class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
                                     <span class="m-menu__link">
                                         <span class="m-menu__link-text">Configuration</span>
                                     </span>
@@ -48,7 +48,7 @@
                                     </a>
                                 </li>
                                 <!-- 操作日志 -->
-                                <li class="m-menu__item " aria-haspopup="true">
+                                <li id="operationLog" class="m-menu__item " aria-haspopup="true">
                                     <a href="@{/view/log}" class="m-menu__link ">
                                         <i class="m-menu__link-icon flaticon-folder-1"></i>
                                         <span class="m-menu__link-text">Operation Log</span>
@@ -68,28 +68,29 @@
                             <span class="m-menu__arrow"></span>
                             <ul class="m-menu__subnav">
                                 <!-- 父菜单 -->
-                                <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
+                                <li id="developmentDeploy" class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
                                     <span class="m-menu__link">
                                         <span class="m-menu__link-text">Development & Deploy</span>
                                     </span>
                                 </li>
                                 <!-- 字典项 -->
-                                <li class="m-menu__item " aria-haspopup="true">
+                                <li id="dictionary" class="m-menu__item " aria-haspopup="true">
                                     <a th:href="@{/view/dictionary}" class="m-menu__link ">
                                         <i class="m-menu__link-icon flaticon-interface-4"></i>
                                         <span class="m-menu__link-text">Dictionary</span>
                                     </a>
                                 </li>
                                 <!-- 国际化 -->
-                                <li class="m-menu__item " aria-haspopup="true">
+                                <li id="i18n" class="m-menu__item " aria-haspopup="true">
                                     <a th:href="@{/view/i18n}" class="m-menu__link ">
                                         <i class="m-menu__link-icon flaticon-interface-4"></i>
                                         <span class="m-menu__link-text">I18n</span>
                                     </a>
                                 </li>
-                                <!-- 角色权限配置 -->
                                 <!-- 系统备份还原 -->
-                                <!-- 运行状态监控 -->
+                                <!-- Actuator状态监控 -->
+                                <!-- Durid监控页面 -->
+                                <!-- Swagger页面 -->
                             </ul>
                         </div>
                     </li>

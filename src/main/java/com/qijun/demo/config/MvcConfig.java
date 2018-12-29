@@ -1,5 +1,6 @@
 package com.qijun.demo.config;
 
+import com.qijun.demo.common.GlobalConstants;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.CacheControl;
@@ -77,8 +78,6 @@ public class MvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry){
-        //设置主页(默认可不设置)
-        registry.addViewController("/").setViewName("/view/index");
     }
 
     /**

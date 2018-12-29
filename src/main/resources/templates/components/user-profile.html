@@ -7,7 +7,8 @@
 </head>
 <body>
     <!-- 定义嵌入的位置 -->
-    <div layout:fragment="content" th:with="menuId='userProfile'">
+    <div layout:fragment="content">
+        <input id="menuId" th:value="userProfile" style="visibility: hidden" readonly/>
         SOMETHING HERE
     </div>
 

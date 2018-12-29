@@ -1,5 +1,6 @@
 package com.qijun.demo.model;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class Role {
     /**
      * 角色
      */
+    @NotBlank(message = "Role name cannot be blank")
     private String role;
 
     /**

@@ -12,6 +12,8 @@
 + `del key` 删除对应键值信息
 + `expire key time` 设置键值多长秒后过期
 + `ttl key` 查看键值剩余的存活时间
++ `select 1` 使用db1
++ `FLUSHALL` `FLUSHDB` 清空所有/当前db的缓存值
 
 ### 2. 五种数据类型
 + 字符串(String)
@@ -28,7 +30,7 @@
 + 集合(Set)
     1. `sadd key member1 [member2]` 插入元素
     2. `srem key member1 [member2]` 删除元素
-    3. `smember key` 获取集合中所有的元素
+    3. `smembers key` 获取集合中所有的元素
     4. `sinter key1 key2` 返回两个集合的交集
     5. `sinterstore key1 key2 key3` 将key1和key2集合中交集放到key3中
     6. `sunion key1 key2` 返回合并的集合

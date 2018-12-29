@@ -71,6 +71,28 @@ public class SecurityUtil {
     private static final int KEY_SIZE = 128;
 
 
+    /**
+     * 使用 MD5 或 SHA-1算法加密
+     * @param data  明文
+     * @param algorithm 算法
+     * @return 加密结果
+     */
+    public static String encryptHash(String data, String algorithm){
+        if (!StringUtils.isEmpty(data)){
+            byte[] bytes = data.getBytes();
+            // 获得MD5摘要算法的 MessageDigest对象
+            try {
+                MessageDigest md5Digest = MessageDigest.getInstance(algorithm);
+                md5Digest.update(SALT.getBytes());
+                byte[] hashed = md5Digest.digest(bytes);
+                return parseByteArray2Hex(hashed);
+            } catch (NoSuchAlgorithmException e) {
+                log.error(e.getMessage());
+            }
+        }
+        return null;
+    }
+
 
     /**
      * base64 编码
@@ -103,42 +125,18 @@ public class SecurityUtil {
     }
 
 
-
-    /**
-     * 使用 MD5 或 SHA-1算法加密
-     * @param data  明文
-     * @param algorithm 算法
-     * @return 加密结果
-     */
-    public static String encryptMD5(String data, String algorithm){
-        if (!StringUtils.isEmpty(data)){
-            byte[] bytes = data.getBytes();
-            // 获得MD5摘要算法的 MessageDigest对象
-            try {
-                MessageDigest md5Digest = MessageDigest.getInstance(algorithm);
-                md5Digest.update(SALT.getBytes());
-                byte[] hashed = md5Digest.digest(bytes);
-                return parseByteArray2Hex(hashed);
-            } catch (NoSuchAlgorithmException e) {
-                log.error(e.getMessage());
-            }
-        }
-        return null;
-    }
-
-
     /**
      * DES 对称加密
      * @param data 加密数据
      * @return 加密结果
      */
-    public byte[] encryptDES(byte[] data){
+    public static String encryptDES(byte[] data){
         if (!StringUtils.isEmpty(data)){
             try {
                 SecretKey desKey = getDESKey();
                 Cipher cipher = Cipher.getInstance(DES);
                 cipher.init(Cipher.ENCRYPT_MODE, desKey);
-                return cipher.doFinal(data);
+                return new String(cipher.doFinal(data));
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -151,7 +149,7 @@ public class SecurityUtil {
      * @param data 密文
      * @return 解密结果
      */
-    public byte[] decryptDES(byte[] data){
+    public static byte[] decryptDES(byte[] data){
         if (!StringUtils.isEmpty(data)){
             try {
                 SecretKey deskey = getDESKey();
@@ -171,13 +169,13 @@ public class SecurityUtil {
      * @param data 明文
      * @return 加密结果
      */
-    public static byte[] encryptAES(byte[] data){
+    public static String encryptAES(byte[] data){
         if (!StringUtils.isEmpty(data)){
             SecretKeySpec secretKeySpec = new SecretKeySpec(decoderBASE64(AES_KEY), AES);
             try {
                 Cipher cipher = Cipher.getInstance(AES);
                 cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-                return cipher.doFinal(data);
+                return new String(cipher.doFinal(data));
             } catch (Exception e) {
                 log.error(e.getMessage());
             }

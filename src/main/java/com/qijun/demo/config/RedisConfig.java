@@ -14,14 +14,18 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
  * 配置Redis缓存
+ * EnableRedisHttpSession将生成bean: springSessionRepositoryFilter
+ * 该bean替换HttpSession为SpringSession
  * @author Qijun
  * @date 11/29/18 4:23 PM
  * @version 1.0
  */
 @Configuration
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1801)
 public class RedisConfig{
 
     private RedisProperties redisProperties;

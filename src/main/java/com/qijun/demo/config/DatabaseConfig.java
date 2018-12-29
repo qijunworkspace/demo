@@ -17,9 +17,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @PropertySource(value = "classpath:config/db.properties")
-public class DruidConfig {
+public class DatabaseConfig {
 
     /**
+     * HikariCP性能最强
      * 配置数据源 Druid DataSource
      * 数据源会自动注入到Mybatis的 sqlSessionFactory中，用于mapper的处理
      * @return druid 数据源
@@ -30,6 +31,5 @@ public class DruidConfig {
         return new DruidDataSource();
     }
 
-    //HikariCP性能最强
 }
 

@@ -1,5 +1,7 @@
 package com.qijun.demo.model;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 权限表
  * @author Qijun
@@ -16,6 +18,7 @@ public class Permission {
     /**
      * 权限名
      */
+    @NotBlank(message = "Permission name cannot be blank")
     private String permission;
 
     /**

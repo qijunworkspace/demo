@@ -4,6 +4,7 @@ import com.qijun.demo.model.Role;
 import com.qijun.demo.model.User;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @date 12/14/18 9:45 AM
  * @version 1.0
  */
+@Repository
 public interface UserMapper {
 
     /**

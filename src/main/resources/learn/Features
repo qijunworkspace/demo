@@ -1,24 +1,5 @@
 NOTE:
 
->> IDEA 快捷方式
-sout: System.out.println
-psvm: 生成main方法
-Alt + Insert : 生成 getter/setter/override/ constructor等
-Ctrl + Alt + I : 格式化选中代码
-Ctrl + Alt + O : 优化导入的类和包,去掉未使用的包
-Ctrl + Alt + B : 查看接口的实现类
-Ctrl + Enter : 修正导入的包
-Alt + Enter : 导入包
-Ctrl + F : 查找文本
-Ctrl + R : 替换文本
-Ctrl + N : 快速打开类型
-Ctrl + Y : 删除单前行
-Ctrl + U : 转到父类
-Ctrl + I : 实现方法
-Ctrl + Shift + Space : 自动补全代码, 可添加方法参数
-Ctrl + Shift + U : 大小写转换
-双击Shift :全局搜索
-
 
 >> 条件注解:
 Spring Boot的设计是先加载应用级配置, 随后再考虑(根据条件注解)自动配置类
@@ -95,6 +76,27 @@ Spring Boot能从多种属性源获得属性(优先级递减)
         | 注解在Controller的方法上,此方法会首先被调用并将结果作为Model属性保存,然后调用对应的Controller处理方法
     InputStream/Reader, OutputStream/Writer: 获取Servlet API中的输入输出流
     @InitBinder: 为Controller添加自定义的HTTP参数解析器
+
+使用@ModelAttribute注解的实体类接收前端发来的数据格式需要为"x-www-form-urlencoded"，@RequestBody注解的实体类接收前端的数据格式为JSON(application/json)格式。
+
+如果为get请求时，后台接收参数的注解应该为RequestParam，如果为post请求时，则后台接收参数的注解就是为RequestBody
+
+
+@RequestBody
+
+作用：
+      i) 该注解用于读取Request请求的body部分数据，使用系统默认配置的HttpMessageConverter进行解析，然后把相应的数据绑定到要返回的对象上；
+      ii) 再把HttpMessageConverter返回的对象数据绑定到 controller中方法的参数上。
+使用时机：
+A) GET、POST方式提时， 根据request header Content-Type的值来判断:
+    application/x-www-form-urlencoded， 可选（即非必须，因为这种情况的数据@RequestParam, @ModelAttribute也可以处理，当然@RequestBody也能处理）；
+    multipart/form-data, 不能处理（即使用@RequestBody不能处理这种格式的数据）；
+    其他格式， 必须（其他格式包括application/json, application/xml等。这些格式的数据，必须使用@RequestBody来处理）；
+B) PUT方式提交时， 根据request header Content-Type的值来判断:
+    application/x-www-form-urlencoded， 必须；
+    multipart/form-data, 不能处理；
+    其他格式， 必须；
+说明：request的body部分的数据编码格式由header部分的Content-Type指定；
 
 Ant路径表达式: *表示匹配任意字符 **表示匹配任意路径 ?匹配单个字符
 
@@ -315,3 +317,114 @@ Mybatis:
      *          | @After
      *          | @Finally
      */
+
+
+验证分两种：对封装的Bean进行验证  或者  对方法简单参数的验证
+
+
+Spring Validation验证框架对参数的验证机制提供了@Validated（Spring's JSR-303规范，是标准JSR-303的一个变种），
+javax提供了@Valid（标准JSR-303规范），配合BindingResult可以直接提供参数验证结果。
+
+@Validated：用在方法入参上无法单独提供嵌套验证功能。不能用在成员属性（字段）上，也无法提示框架进行嵌套验证。能配合嵌套验证注解@Valid进行嵌套验证。
+@Valid：用在方法入参上无法单独提供嵌套验证功能。能够用在成员属性（字段）上，提示验证框架进行嵌套验证。能配合嵌套验证注解@Valid进行嵌套验证。
+@Validated 是只用spring  Validator 校验机制使用，@Validated和BindingResult bindingResult是配对出现，并且形参顺序是固定的（一前一后）。
+@Valid是使用hibernate validation的时候使用
+如果方法中有BindingResult类型的参数，spring校验完成之后会将校验结果传给这个参数。通过BindingResult控制程序抛出自定义类型的异常或者返回不同结果。
+
+
+@Valid	被注释的元素是一个对象，需要检查此对象的所有字段值
+     Bean Validation 中内置的 constraint
+     @Null   被注释的元素必须为 null
+     @NotNull    被注释的元素必须不为 null
+     @AssertTrue     被注释的元素必须为 true
+     @AssertFalse    被注释的元素必须为 false
+     @Min(value)     被注释的元素必须是一个数字，其值必须大于等于指定的最小值
+     @Max(value)     被注释的元素必须是一个数字，其值必须小于等于指定的最大值
+     @DecimalMin(value)  被注释的元素必须是一个数字，其值必须大于等于指定的最小值
+     @DecimalMax(value)  被注释的元素必须是一个数字，其值必须小于等于指定的最大值
+     @Size(max=, min=)   被注释的元素的大小必须在指定的范围内
+     @Digits (integer, fraction)     被注释的元素必须是一个数字，其值必须在可接受的范围内
+     @Past   被注释的元素必须是一个过去的日期
+     @Future     被注释的元素必须是一个将来的日期
+     @Pattern(regex=,flag=)  被注释的元素必须符合指定的正则表达式
+
+     Hibernate Validator 附加的 constraint
+     @NotBlank(message =)   验证字符串非null，且长度必须大于0
+     @Email  被注释的元素必须是电子邮箱地址
+     @Length(min=,max=)  被注释的字符串的大小必须在指定的范围内
+     @NotEmpty   被注释的字符串的必须非空
+     @Range(min=,max=,message=)  被注释的元素必须在合适的范围内
+
+Session生命周期
+浏览器访问服务器时，服务器会创建一个session对象（有一个sessionId）。服务器在默认的情况下，会将sessionId以cookie的机制发送给浏览器。当浏览器再次访问服务器时，会将sessionId发送给服务器，服务器依据sessionId就可以找到对应的session对象。服务器以此方式管理用户的状态。
+　　Session存储在服务器端，一般放置在服务器的内存中（为了高速存取），Sessinon在用户访问第一次访问服务器时创建，需要注意只有访问JSP、Servlet等程序时才会创建Session，只访问HTML、IMAGE等静态资源并不会创建Session，可调用request.getSession(true)强制生成Session。
+　　Session什么时候失效？
+    　　1. 服务器会把长时间没有活动的Session从服务器内存中清除，此时Session便失效。Tomcat中Session的默认失效时间为20分钟。
+    　　2. 调用Session的invalidate方法。
+
+SPring-session
+    # 存储 Session 数据,数据类型hash
+    Key：spring:session:sessions:XXXXXXX
+
+    # Redis TTL触发Session 过期。(Redis 本身功能)，数据类型：String
+    Key：spring:session:sessions:expires:XXXXX
+    #执行 TTL key ，查看剩余生存时间
+
+    #定时Job程序触发Session 过期。(spring-session 功能)，数据类型：Set
+    Key：spring:session:expirations:XXXXX
+
+浏览器的cookie的话，会发现有一个name为“SESSION”的cookie，其值为redis中spring session key的一部分
+Cookie过期设置为最大的可能值是因为cookie是在会话创建的时候设置。如果它被设置成和session过期一样的话，当用户使用session时session可以更新，但是cookie过期之后不会更新，从而将会导致过期而被限定。
+
+Spring Session下的Redis存储结构：
+    spring:session是默认的Redis HttpSession前缀
+    每一个session都会创建3组数据:
+        -> spring:session:sessions:xxxxxxxx： hash结构，存储session键值对及创建时间、最大失效时间、最后访问时间
+        -> spring:session:sessions:expires:xxxx ： 用于ttl过期时间记录
+        -> spring:session:expirations:1515135000000: set结构，记录过期时间
+        redis清除过期key的行为是一个异步行为且是一个低优先级的行为，用文档中的原话来说便是，可能会导致session不被清除。于是引入了专门的expiresKey，来专门负责session的清除，包括我们自己在使用redis时也需要关注这一点。在开发层面，我们仅仅需要关注第三个key就行了。
+Redis的强大之处在于支持KeySpace Notifiction——键空间通知。即可以监视某个key的变化，如删除、更新、过期。当key发生上述行为是，以便可以接受到变化的通知做出相应的处理。
+spring-session为了能够及时的产生Session的过期时的过期事件，所以增加了：
+    spring:session:sessions:expires:33fdd1b6-b496-4b33-9f7d-df96679d32fe
+    spring:session:expirations:1439245080000
+    spring-session中有个定时任务，每个整分钟都会查询相应的spring:session:expirations:整分钟的时间戳中的过期SessionId，然后再访问一次这个SessionId，即spring:session:sessions:expires:SessionId，以便能够让Redis及时的产生key过期事件——即Session过期事件。
+
+Redis会为每个RedisSession存储三个k-v。
+
+第一个k-v用来存储Session的详细信息，包括Session的过期时间间隔、最近的访问时间、attributes等等。这个k的过期时间为Session的最大过期时间 + 5分钟。如果默认的最大过期时间为30分钟，则这个k的过期时间为35分钟
+第二个k-v用来表示Session在Redis中的过期，这个k-v不存储任何有用数据，只是表示Session过期而设置。这个k在Redis中的过期时间即为Session的过期时间间隔
+第三个k-v存储这个Session的id，是一个Set类型的Redis数据结构。这个k中的最后的1439245080000值是一个时间戳，根据这个Session过期时刻滚动至下一分钟而计算得出。
+
+简单描述下，为什么RedisSession的存储用到了三个Key，而非一个Redis过期Key。
+对于Session的实现，需要支持HttpSessionEvent，即Session创建、过期、销毁等事件。当应用用监听器设置监听相应事件，Session发生上述行为时，监听器能够做出相应的处理。
+Redis的强大之处在于支持KeySpace Notifiction——键空间通知。即可以监视某个key的变化，如删除、更新、过期。当key发生上述行为是，以便可以接受到变化的通知做出相应的处理。
+spring-session为了能够及时的产生Session的过期时的过期事件，所以增加了：
+
+spring:session:sessions:expires:33fdd1b6-b496-4b33-9f7d-df96679d32fe
+spring:session:expirations:1439245080000
+
+spring-session中有个定时任务，每个整分钟都会查询相应的spring:session:expirations:整分钟的时间戳中的过期SessionId，然后再访问一次这个SessionId，即spring:session:sessions:expires:SessionId，以便能够让Redis及时的产生key过期事件——即Session过期事件。
+
+
+spring-session分为以下核心模块：
+SessionRepositoryFilter：Servlet规范中Filter的实现，用来切换HttpSession至Spring Session，包装HttpServletRequest和HttpServletResponse
+HttpServerletRequest/HttpServletResponse/HttpSessionWrapper包装器：包装原有的HttpServletRequest、HttpServletResponse和Spring Session，实现切换Session和透明继承HttpSession的关键之所在
+Session：Spring Session模块
+SessionRepository：管理Spring Session的模块
+HttpSessionStrategy：映射HttpRequst和HttpResponse到Session的策略
+
+SessionRepositoryRequestWrapper继承Servlet规范中定义的包装器HttpServletRequestWrapper。HttpServletRequestWrapper是Servlet规范api提供的用于扩展HttpServletRequest的扩张点——即装饰器模式，可以通过重写一些api达到功能点的增强和自定义。
+
+Tips：装饰器模式
+装饰器模式（包装模式）是对功能增强的一种绝佳模式。实际利用的是面向对象的多态性实现扩展。Servlet规范中开放此HttpServletRequestWrapper接口，是让developers自行扩展实现。这种使用方式和jdk中的FilterInputStream/FilterInputStream如出一辙。
+
+适配器模式
+spring-session单独抽象出Session层接口，可以应对多种场景下不同的session的实现，然后通过适配器模式将Session适配成HttpSession的接口，精妙至极
+
+Session是spring-session对session的抽象，主要是为了鉴定用户，为Http请求和响应提供上下文过程，该Session可以被HttpSession、WebSocket Session，非WebSession等使用。定义了Session的基本行为：
+    getId：获取sessionId
+    setAttribute：设置session属性
+    getAttribte：获取session属性
+
+策略模式
+策略模式是一个传神的神奇模式，是java的多态非常典型应用，是开闭原则、迪米特法则的具体体现。将同类型的一系列的算法封装在不同的类中，通过使用接口注入不同类型的实现，以达到的高扩展的目的。一般是定义一个策略接口，按照不同的场景实现各自的策略。

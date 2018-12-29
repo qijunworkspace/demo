@@ -3,6 +3,7 @@ package com.qijun.demo.mapper;
 import com.qijun.demo.model.Permission;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @date 12/14/18 9:45 AM
  * @version 1.0
  */
+@Repository
 public interface PermissionMapper {
 
     /**
@@ -22,7 +24,7 @@ public interface PermissionMapper {
     @Results(id = "PermissionResult", value = {
             @Result(id = true, column = "id", property = "id", jdbcType = JdbcType.INTEGER),
             @Result(column = "permission", property = "permission", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "type", property = "type", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "type", property = "type", jdbcType = JdbcType.INTEGER),
             @Result(column = "description", property = "description", jdbcType = JdbcType.VARCHAR),
     })
     List<Permission> getAll();
@@ -63,7 +65,7 @@ public interface PermissionMapper {
         "from permission",
         "where id = #{id,jdbcType=INTEGER}"
     })
-    @ResultMap("com.qijun.demo.mapper.PermissionMapper.BaseResultMap")
+    @ResultMap("PermissionResult")
     Permission selectByPrimaryKey(Integer id);
 
 

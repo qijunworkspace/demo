@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<!-- 定义嵌入的位置 -->
+<div layout:fragment="content">
+    <input id="menuId" th:value="home" style="visibility: hidden" readonly/>
+    SOMETHING HERE
+</div>
+
+</body>
+</html>

@@ -13,6 +13,7 @@
 |Ctrl + Alt + B |查看接口的实现类|
 |Ctrl + F       |在当前文件中查找|
 |Ctrl + Shift + F|在工程中查找内容|
+|Ctrl + E        |查看最近打开的文件列表|
 |Ctrl + R       |在当前文件中替换|
 |Ctrl + D       |复制当前行|
 |Ctrl + Y       |删除当前行|
