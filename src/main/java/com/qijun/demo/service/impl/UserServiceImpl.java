@@ -2,8 +2,10 @@ package com.qijun.demo.service.impl;
 
 import com.qijun.demo.mapper.UserMapper;
 import com.qijun.demo.model.User;
+import com.qijun.demo.response.CustomException;
 import com.qijun.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -50,6 +52,8 @@ public class UserServiceImpl implements UserService {
             userMapper.delUserRole(userId);
             if (null != roleId){
                 return userMapper.insertUserRole(userId, roleId);
+            }else {
+                throw new CustomException(HttpStatus.EXPECTATION_FAILED, "User's role cannot be empty");
             }
         }
         return 0;

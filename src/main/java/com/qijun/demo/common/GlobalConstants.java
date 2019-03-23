@@ -39,7 +39,7 @@ public class GlobalConstants {
     public static final String HOME_PAGE = "/home";
 
     /**
-     * 登录成功后显示的主页面
+     * 未授权页面
      */
     public static final String UNAUTHORIZED_PAGE = "/unauthorized";
 

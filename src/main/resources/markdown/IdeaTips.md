@@ -25,4 +25,5 @@
 |双击Shift       |全局搜索|
 |Ctrl + space   |代码补全|
 |Ctrl + F12|显示当前文档结构|
+|Ctrl + Alt + V|引入变量|
 

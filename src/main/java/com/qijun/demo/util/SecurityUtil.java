@@ -19,9 +19,10 @@ import java.security.SecureRandom;
 
 /**
  * 常用的加解密工具类
+ * Base64 编码、解码
  * 单向加密：MD5、SHA
  * 对称加密：DES、AES
- * 非对称加密：RSA 未引入
+ * 非对称加密(公钥、私钥)：RSA 未引入
  *
  * @author Qijun
  * @date 12/13/18 4:33 PM
@@ -57,16 +58,19 @@ public class SecurityUtil {
      * 加密盐，单向加密使用
      */
     private static final String SALT = "qijunworkspace";
+
     /**
-     * 对称加密的密钥，经过base64编程的密钥字符串
+     * DES对称加密的密钥，经过base64编程的密钥字符串
      */
     private static final String DES_KEY = "xzS62vH+Dt8=";
+
     /**
-     * 对称加密的密钥，经过base64编程的密钥字符串
+     * AES对称加密的密钥，经过base64编程的密钥字符串
      */
     private static final String AES_KEY = "P9Yt5r7AcAwC6iShlt52UQ==";
+
     /**
-     * AES 对称密钥长度
+     *  AES 对称密钥长度
      */
     private static final int KEY_SIZE = 128;
 
@@ -82,9 +86,9 @@ public class SecurityUtil {
             byte[] bytes = data.getBytes();
             // 获得MD5摘要算法的 MessageDigest对象
             try {
-                MessageDigest md5Digest = MessageDigest.getInstance(algorithm);
-                md5Digest.update(SALT.getBytes());
-                byte[] hashed = md5Digest.digest(bytes);
+                MessageDigest mdDigest = MessageDigest.getInstance(algorithm);
+                mdDigest.update(SALT.getBytes());
+                byte[] hashed = mdDigest.digest(bytes);
                 return parseByteArray2Hex(hashed);
             } catch (NoSuchAlgorithmException e) {
                 log.error(e.getMessage());
@@ -121,7 +125,7 @@ public class SecurityUtil {
                 log.error(e.getMessage());
             }
         }
-        return null;
+        return new byte[0];
     }
 
 
@@ -141,7 +145,7 @@ public class SecurityUtil {
                 log.error(e.getMessage());
             }
         }
-        return null;
+        return new String();
     }
 
     /**
@@ -210,8 +214,8 @@ public class SecurityUtil {
     private static String parseByteArray2Hex(byte[] data) {
 
         if (!StringUtils.isEmpty(data)){
-            StringBuffer hex = new StringBuffer();
-            for(int i = 0; i < data.length; i++) {
+            StringBuilder hex = new StringBuilder();
+            for (int i : data) {
                 int h = data[i] & 0XFF;
                 if(h < 16) {
                     hex.append("0");
@@ -259,7 +263,7 @@ public class SecurityUtil {
      * 用于生成对称密钥
      * @param algorithm 算法
      * @return 密文
-     * @throws NoSuchAlgorithmException
+     * @throws NoSuchAlgorithmException 算法不存在
      */
     @SuppressWarnings(value = "unused")
     private static String genSecretKey(String algorithm) throws NoSuchAlgorithmException {

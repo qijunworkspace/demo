@@ -37,7 +37,7 @@ public class PageResult {
     private long pageCount;
 
     /**
-     * 是否下一页
+     * 是否有下一页
      */
     private boolean more;
 
