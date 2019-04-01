@@ -2,6 +2,10 @@
 !.mvn/wrapper/maven-wrapper.jar
 .mvn/
 
+### Private Configuration ###
+/src/main/resources/config/db.properties
+/src/main/resources/config/redis.properties
+
 ### STS ###
 .apt_generated
 .classpath
