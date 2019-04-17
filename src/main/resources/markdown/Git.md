@@ -1,10 +1,9 @@
 # Git 学习总结
 
-> 软件配置管理SCM: 一种标识、组织和控制更改的技术, 贯穿整个软件生命周期中建立和维护项目产品的完整性。
-    通过执行版本控制、变更控制的规程, 以及使用合适的配置管理软件, 来保证所有配置项的完整性和可跟踪性。
-    常用的工具有 Microsoft VSS，CVS，SVN等。  
-    
+> 软件配置管理SCM: 一种标识、组织和控制更改的技术, 贯穿整个软件生命周期中建立和维护项目产品的完整性。 通过执行版本控制、变更控制的规程, 以及使用合适的配置管理软件, 来保证所有配置项的完整性和可跟踪性。 常用的工具有 Microsoft VSS，CVS，SVN等。  
+
 > 分布式版本控制: 每台电脑都是完整的版本库，通过中央版本库进行合并。  
+>
 > Git: 分布式、速度快、branch灵活、跟踪文件的修改而非文件
 
 
@@ -37,11 +36,11 @@
     + Working   +               + Staging +              +  Local  +      #        +  Remote +
     + Directory +               + Area    +              +  Repo   +      #        +  Repo   +
     +++++++++++++               +++++++++++              +++++++++++      #        +++++++++++
-    
+
 + 工作区： 本地实际的文件位置
 + 暂存区： 下一次需要提交的文件修改
 + 本地仓库： 本地的代码分支管理仓库(HEAD指向当前分支)
-    
+  
 ### 2. 常用操作命令
 + `git init` 在当前文件夹创建仓库
 + `git reflog` 查看仓库版本历史(commit/pull/merge/checkout等)
@@ -115,10 +114,18 @@
 + 大型团队开发使用Git Flow工具，添加Feature分支、Release分支及Hotfix分支
 + 每个开发人员建立自己的分支(本地)，定期向dev分支合并
 > `git checkout -b dev origin/dev` 建立分支并与远程分支对应  
+>
 > `git push origin dev` 向远程推送dev分支  
+>
 > `git push --set-upstream dev origin/dev` 将本地dev分支与远程origin/dev分支关联  
+>
 > `git pull origin/dev dev` 拉取远程分支的内容  
+>
 > `git push origin/dev dev` 推送dev分支到远程  
+>
 > `git branch -r` 查看远程分支  
+>
 > `git checkout -b dev origin/dev` 将远程的分支迁移到本地并切换到该分支  
+>
+> `git update-index --assume-unchanged src/main/resources/config/db.properties`  取消本地配置文件的上传
 

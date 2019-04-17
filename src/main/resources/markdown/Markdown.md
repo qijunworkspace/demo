@@ -1,6 +1,6 @@
 # Markdown
 
-文本书写语言，兼容HTML的标签，纯文本易读易写。  
+文本书写语言，兼容HTML的标签，纯文本易读易写。 
 HTML区块元素前后需要加上空行，HTML元素内的Markdown语法不会被识别。  
 
 
@@ -36,13 +36,13 @@ _____
 ```
  code start   
  end  
-```  
+```
 
 ##代码区块
 Markdown 会用 \<pre\> 和 \<code\> 标签来把代码区块包起来。
- 
+
     只要简单地缩进 4 个空格或是 1 个制表符就可以。需要与前行文字空一行再开始  
-	代码区块里面，&或<或> 会自动转成 HTML 实体  
+    代码区块里面，&或<或> 会自动转成 HTML 实体  
 代码区块会一直持续到没有缩进的那一行
 
 ## 图片
@@ -52,12 +52,14 @@ Markdown 会用 \<pre\> 和 \<code\> 标签来把代码区块包起来。
 	图片alt 就是显示在图片下面的文字，相当于对图片内容的解释。  
 	图片title 是图片的标题，当鼠标移到图片上时显示的内容.
 2. 参考式: 
-	> ![无图时文字][1]  
-	 [1]: ../markdown/md_pic.jpg "测试图片"
+  > ![无图时文字][1]  
+
+[1]: ../markdown/img/md_pic.jpg "测试图片"
 
 ## 超链接
 + 行内链接: 
-	> [an example](http://example.com/ "Title")
+
+  > [an example](http://example.com/ "Title")
 + 参考式在链接文字的括号后再接上方括号，在文件的任意处把这个标记的链接内容定义出来
 	> + This is [an example][id] reference-style link.
 	> [id]: http://example.com/  "Optional Title Here"
