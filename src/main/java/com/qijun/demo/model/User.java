@@ -1,5 +1,7 @@
 package com.qijun.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.qijun.demo.common.GlobalConstants;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -61,6 +63,7 @@ public class User implements UserDetails {
     /**
      * 注册时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date registTime;
 
     /**
@@ -152,7 +155,7 @@ public class User implements UserDetails {
      */
     @Override
     public boolean isAccountNonExpired() {
-        return status != 3;
+        return status != GlobalConstants.ACCOUNT_STATUS.DELETED.value();
     }
 
 
@@ -164,7 +167,7 @@ public class User implements UserDetails {
      */
     @Override
     public boolean isAccountNonLocked() {
-        return status != 2;
+        return status != GlobalConstants.ACCOUNT_STATUS.LOCKED.value();
     }
 
     /**
@@ -187,7 +190,7 @@ public class User implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return status == 1;
+        return status == GlobalConstants.ACCOUNT_STATUS.NORMAL.value();
     }
 
 
@@ -208,18 +211,18 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
+        sb.append(getClass().getName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", username=").append(username);
-        sb.append(", password=").append(password);
+        //sb.append(", password=").append(password);
         sb.append(", email=").append(email);
         sb.append(", telephone=").append(telephone);
         sb.append(", portrait=").append(portrait);
         sb.append(", status=").append(status);
         sb.append(", registTime=").append(registTime);
-        sb.append(", role=").append(role);
+        //sb.append(", role=").append(role);
         sb.append("]");
         return sb.toString();
     }

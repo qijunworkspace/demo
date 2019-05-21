@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 /**
  * 解决actuator的访问权限问题
- * 不能直接使用SecurityConfig的配置
+ * 不能直接使用SecurityConfig的配置, 在监控页面使用basic验证方式
  * @author Qijun
  * @version 1.0
  * @date 12/28/18 8:25 AM

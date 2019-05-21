@@ -83,14 +83,20 @@
 
 		<!--Thymeleaf页面模板-->
 		<dependency>
+			<groupId>nz.net.ultraq.thymeleaf</groupId>
+			<artifactId>thymeleaf-layout-dialect</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
+		<!-- 与spring security框架的扩展包，主要实现在thymeleaf的模板页面中可以很方便的调用security框架返回的用户验证和权限信息 -->
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>nz.net.ultraq.thymeleaf</groupId>
-			<artifactId>thymeleaf-layout-dialect</artifactId>
-			<version>2.3.0</version>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
 
 
@@ -135,8 +141,8 @@
 		<!--分页插件-->
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
-			<artifactId>pagehelper</artifactId>
-			<version>5.1.8</version>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>1.2.10</version>
 		</dependency>
 
 
@@ -146,6 +152,7 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
 
 		<!-- 数据库连接池 -->
 		<dependency>

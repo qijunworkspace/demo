@@ -62,10 +62,28 @@ public class GlobalConstants {
     /**
      * 超级管理员角色名称
      */
-    public static final String SUPER_ADMIN = "SUPER_ADMIN";
+    public static final String SUPER_ADMIN = "ADMIN";
 
     /**
      * 验证码存储对应的键
      */
     public static final String KAPTCHA_SESSION_KEY = "verification";
+
+    /**
+     * 账户状态
+     */
+    public enum ACCOUNT_STATUS{
+
+        NEED_REVIEW(0), NORMAL(1), LOCKED(2), DELETED(3);
+
+        private int status;
+
+        ACCOUNT_STATUS(int i){
+            status = i;
+        }
+
+        public int value(){
+            return status;
+        }
+    }
 }

@@ -1,8 +1,10 @@
 package com.qijun.demo.mapper;
 
+import com.qijun.demo.mapper.provider.UserProvider;
 import com.qijun.demo.model.Role;
 import com.qijun.demo.model.User;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +33,7 @@ public interface UserMapper {
             @Result(column = "portrait", property = "portrait", jdbcType = JdbcType.VARCHAR),
             @Result(column = "status", property = "status", jdbcType = JdbcType.INTEGER),
             @Result(column = "regist_time", property = "registTime", jdbcType = JdbcType.DATE),
-            @Result(column = "id", property = "role", javaType = Role.class, one = @One(select = "getUserRole"))
+            @Result(column = "id", property = "role", one = @One(select = "getUserRole", fetchType = FetchType.EAGER))
     })
     List<User> getAll();
 
@@ -50,7 +52,7 @@ public interface UserMapper {
      * @return 角色信息
      */
     @Select("SELECT * FROM role WHERE id IN (SELECT role_id FROM user_role WHERE user_id = #{userId}) LIMIT 1")
-    @ResultMap("com.qijun.demo.mapper.RoleMapper.RoleResult")
+    //@ResultMap("com.qijun.demo.mapper.RoleMapper.RoleResult")
     Role getUserRole(Integer userId);
 
     /**
@@ -102,7 +104,7 @@ public interface UserMapper {
         "#{telephone,jdbcType=VARCHAR}, #{portrait,jdbcType=VARCHAR}, ",
         "#{status,jdbcType=INTEGER}, #{registTime,jdbcType=DATE})"
     })
-    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=true, resultType=Integer.class)
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before = false, resultType=Integer.class)
     int insert(User record);
 
     /**
@@ -150,4 +152,14 @@ public interface UserMapper {
      * @return 更新个数
      */
     int updateByPrimaryKeySelective(User record);
+
+    /**
+     * 搜索用户
+     * @param username 用户名
+     * @param roleId 角色编号
+     * @return
+     */
+    @SelectProvider(type = UserProvider.class, method="searchUser")
+    @ResultMap("UserResult")
+    List<User> searchUser(@Param("username") String username, @Param("roleId")  Integer roleId);
 }

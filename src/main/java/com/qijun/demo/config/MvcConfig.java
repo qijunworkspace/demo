@@ -1,6 +1,5 @@
 package com.qijun.demo.config;
 
-import com.qijun.demo.common.GlobalConstants;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.CacheControl;
@@ -26,6 +25,8 @@ public class MvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry){
+        //registry.addInterceptor()
+        //registry.addWebRequestInterceptor()
     }
 
     /**

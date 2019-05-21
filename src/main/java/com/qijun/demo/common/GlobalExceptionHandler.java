@@ -5,12 +5,14 @@ import com.qijun.demo.response.CustomResponse;
 import com.qijun.demo.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.el.MethodNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -81,7 +83,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({Exception.class})
     public CustomResponse defaultException(HttpServletRequest request, Exception exception){
         logger.error("Exception: "+request.getRequestURI()+" - "+exception.getMessage());
-        exception.printStackTrace();
+        //exception.printStackTrace();
         return ResponseUtil.error(exception.getMessage());
     }
 

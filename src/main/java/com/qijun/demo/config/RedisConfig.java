@@ -6,14 +6,18 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.SessionRepository;
+import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
@@ -25,7 +29,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  * @version 1.0
  */
 @Configuration
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1801)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 24*3600*7)
 public class RedisConfig{
 
     private RedisProperties redisProperties;
@@ -92,8 +96,10 @@ public class RedisConfig{
 
         RedisTemplate<String, Object> redisTemplate =  new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory);
+        //redisTemplate.setDefaultSerializer(jackson2JsonRedisSerializer);
         redisTemplate.setKeySerializer(stringSerializer);
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+
         redisTemplate.setHashKeySerializer(stringSerializer);
         redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
         // 开启事务支持
@@ -102,5 +108,9 @@ public class RedisConfig{
 
         return redisTemplate;
     }
+
+/*
+    由于采用了热部署，非延迟加载的User.ROLE反序列化失败 导致session反序列化出现问题
+*/
 
 }

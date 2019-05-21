@@ -1,6 +1,7 @@
 package com.qijun.demo.model;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * 权限表
@@ -8,7 +9,7 @@ import javax.validation.constraints.NotBlank;
  * @date 12/14/18 9:45 AM
  * @version 1.0
  */
-public class Permission {
+public class Permission implements Serializable {
 
     /**
      * 主键

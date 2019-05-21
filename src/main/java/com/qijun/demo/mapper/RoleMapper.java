@@ -28,7 +28,7 @@ public interface RoleMapper {
             @Result(id = true, column = "id", property = "id", jdbcType = JdbcType.INTEGER),
             @Result(column = "role", property = "role", jdbcType = JdbcType.VARCHAR),
             @Result(column = "description", property = "description", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "id", property = "permission", javaType = List.class,
+            @Result(column = "id", property = "permissions", javaType = List.class,
                     many = @Many(select = "getRolePermissions", fetchType = FetchType.LAZY))
     })
     List<Role> getAll();
@@ -39,7 +39,7 @@ public interface RoleMapper {
      * @param roleId 角色主键
      * @return 权限列表
      */
-    @Select("SELECT * FROM permission WHERE id IN (SELECT * FROM role_permission WHERE role_id = #{roleId, jdbcType=INTEGER})")
+    @Select("SELECT * FROM permission WHERE id IN (SELECT permission_id FROM role_permission WHERE role_id = #{roleId, jdbcType=INTEGER})")
     @ResultMap("com.qijun.demo.mapper.PermissionMapper.PermissionResult")
     List<Permission> getRolePermissions(Integer roleId);
 
@@ -85,7 +85,7 @@ public interface RoleMapper {
         "values (#{id,jdbcType=INTEGER}, #{role,jdbcType=VARCHAR}, ",
         "#{description,jdbcType=VARCHAR})"
     })
-    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=true, resultType=Integer.class)
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Integer.class)
     int insert(Role record);
 
     /**

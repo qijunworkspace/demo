@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>左侧菜单栏</title>
@@ -12,13 +13,35 @@
                  m-menu-vertical="1" m-menu-scrollable="1" m-menu-dropdown-timeout="500" style="position: relative;">
                 <!-- 菜单列表 -->
                 <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
-                    <!-- 主页 -->
+                    <!-- 主页：规则筛选股票展示-->
                     <li id="home" class="m-menu__item  m-menu__item--active" aria-haspopup="true">
                         <a th:href="@{/home}" class="m-menu__link ">
                             <i class="m-menu__link-icon flaticon-paper-plane"></i>
                             <span class="m-menu__link-title">
                                 <span class="m-menu__link-wrap">
                                     <span class="m-menu__link-text">Home</span>
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+                    <!-- 选中股票列表 -->
+                    <li id="selectedStock" class="m-menu__item " aria-haspopup="true">
+                        <a th:href="@{/selectedStock}" class="m-menu__link ">
+                            <i class="m-menu__link-icon flaticon-line-graph"></i>
+                            <span class="m-menu__link-title">
+                                <span class="m-menu__link-wrap">
+                                    <span class="m-menu__link-text">Selected Stock</span>
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+                    <!-- 查询股票信息 -->
+                    <li id="searchStock" class="m-menu__item " aria-haspopup="true">
+                        <a th:href="@{/searchStock}" class="m-menu__link ">
+                            <i class="m-menu__link-icon flaticon-folder-1"></i>
+                            <span class="m-menu__link-title">
+                                <span class="m-menu__link-wrap">
+                                    <span class="m-menu__link-text">Search Stock</span>
                                 </span>
                             </span>
                         </a>
@@ -42,23 +65,30 @@
                                 </li>
                                 <!-- 用户信息 -->
                                 <li id="userProfile" class="m-menu__item " aria-haspopup="true">
-                                    <a href="@{/view/user}" class="m-menu__link ">
+                                    <a th:href="@{/userProfile}" class="m-menu__link ">
                                         <i class="m-menu__link-icon flaticon-profile-1"></i>
                                         <span class="m-menu__link-text">User Profile</span>
                                     </a>
                                 </li>
-                                <!-- 操作日志 -->
+                                <!-- 用户信息 -->
+                                <li sec:authorize="hasAnyAuthority('ADMIN')" id="userManagement" class="m-menu__item " aria-haspopup="true">
+                                    <a th:href="@{/userManagement}" class="m-menu__link ">
+                                        <i class="m-menu__link-icon flaticon-profile-1"></i>
+                                        <span class="m-menu__link-text">User Management</span>
+                                    </a>
+                                </li>
+                                <!-- 操作日志
                                 <li id="operationLog" class="m-menu__item " aria-haspopup="true">
-                                    <a href="@{/view/log}" class="m-menu__link ">
+                                    <a href="@{/log}" class="m-menu__link ">
                                         <i class="m-menu__link-icon flaticon-folder-1"></i>
                                         <span class="m-menu__link-text">Operation Log</span>
                                     </a>
-                                </li>
+                                </li>-->
                             </ul>
                         </div>
                     </li>
                     <!-- 部署调整 -->
-                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                    <li class="m-menu__item  m-menu__item--submenu m--hide" aria-haspopup="true" m-menu-submenu-toggle="hover">
                         <a href="javascript:;" class="m-menu__link m-menu__toggle">
                             <i class="m-menu__link-icon flaticon-interface-6"></i>
                             <span class="m-menu__link-text">Development & Deploy</span>
@@ -75,18 +105,19 @@
                                 </li>
                                 <!-- 字典项 -->
                                 <li id="dictionary" class="m-menu__item " aria-haspopup="true">
-                                    <a th:href="@{/view/dictionary}" class="m-menu__link ">
+                                    <a th:href="@{/dictionary}" class="m-menu__link ">
                                         <i class="m-menu__link-icon flaticon-interface-4"></i>
                                         <span class="m-menu__link-text">Dictionary</span>
                                     </a>
                                 </li>
-                                <!-- 国际化 -->
+                                <!-- 国际化
                                 <li id="i18n" class="m-menu__item " aria-haspopup="true">
                                     <a th:href="@{/view/i18n}" class="m-menu__link ">
                                         <i class="m-menu__link-icon flaticon-interface-4"></i>
                                         <span class="m-menu__link-text">I18n</span>
                                     </a>
                                 </li>
+                                -->
                                 <!-- 系统备份还原 -->
                                 <!-- Actuator状态监控 -->
                                 <!-- Durid监控页面 -->

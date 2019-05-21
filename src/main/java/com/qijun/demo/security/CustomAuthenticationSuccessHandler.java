@@ -32,6 +32,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     private ObjectMapper objectMapper;
 
     Logger logger = LoggerFactory.getLogger(getClass());
+
     /**
      * 请求对象的缓存
      */

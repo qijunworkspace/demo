@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>页头片段</title>
@@ -14,7 +16,7 @@
                         <div class="m-stack__item m-stack__item--middle m-brand__logo">
                             <!-- 图片 -->
                             <a th:href="@{/home}" class="m-brand__logo-wrapper">
-                                <img alt="" th:src="@{/static/image/system/mountain.png}" th:width="50" th:height="50"/>
+                                <img alt="Qijun" th:src="@{/static/image/system/mountain.png}" th:width="50" th:height="50"/>
                             </a>
                         </div>
                         <!-- 商标栏工具 -->
@@ -29,11 +31,12 @@
                                 m-brand__toggler--left m--visible-tablet-and-mobile-inline-block">
                                 <span></span>
                             </a>
-                            <!-- 平板及手机响应式头部菜单(左侧按钮) -->
+                            <!-- 平板及手机响应式头部菜单(左侧按钮)
                             <a id="m_aside_header_menu_mobile_toggle" href="javascript:;" class="m-brand__icon m-brand__toggler
                                 m--visible-tablet-and-mobile-inline-block">
                                 <span></span>
                             </a>
+                             -->
                             <!-- 平板及手机头部工具条切换显示 -->
                             <a id="m_aside_header_topbar_mobile_toggle" href="javascript:;" class="m-brand__icon
                                 m--visible-tablet-and-mobile-inline-block">
@@ -44,14 +47,14 @@
                 </div>
 
                 <!-- 水平菜单部分 -->
-                <div class="m-stack__item m-stack__item--fluid m-header-head" id="m_header_nav">
+                <div  class="m-stack__item m-stack__item--fluid m-header-head" id="m_header_nav">
                     <!-- 关闭头部菜单栏的按钮 -->
                     <button class="m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-dark "
                             id="m_aside_header_menu_mobile_close_btn">
                         <i class="la la-close"></i>
                     </button>
-                    <!-- 头部菜单栏(左侧按钮)部分 -->
-                    <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas
+                    <!-- 头部菜单栏(左侧按钮)部分 : 隐藏 -->
+                    <div style="display: none" id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas
                         m-header-menu--skin-light m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-dark
                         m-aside-header-menu-mobile--submenu-skin-dark ">
                         <!-- 头部菜单列表 -->
@@ -134,12 +137,12 @@
                                         <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
                                         <div class="m-dropdown__inner">
                                             <div class="m-dropdown__header m--align-center" style="background: url(/static/metronic/assets/app/media/img/misc/notification_bg.jpg); background-size: cover;">
-                                                <span class="m-dropdown__header-title">News & Alarm</span>
-                                                <span class="m-dropdown__header-subtitle">User Notifications</span>
+                                                <span class="m-dropdown__header-title">User Notifications</span>
+                                                <span class="m-dropdown__header-subtitle"></span>
                                             </div>
                                             <div class="m-dropdown__body">
                                                 <div class="m-dropdown__content">
-                                                    <!-- 分为三个Tab页 -->
+                                                    <!-- 分为2个Tab页 -->
                                                     <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--brand" role="tablist">
                                                         <li class="nav-item m-tabs__item">
                                                             <a class="nav-link m-tabs__link active" data-toggle="tab" href="#topbar_notifications_notifications" role="tab">News</a>
@@ -153,15 +156,10 @@
                                                             <div class="m-scrollable" data-scrollable="true" data-height="250" data-mobile-height="200">
                                                                 <div class="m-list-timeline m-list-timeline--skin-light">
                                                                     <div class="m-list-timeline__items">
-                                                                        <div class="m-list-timeline__item">
+                                                                        <div id="example_item" class="m-list-timeline__item m--hide">
                                                                             <span class="m-list-timeline__badge -m-list-timeline__badge--state-success"></span>
-                                                                            <span class="m-list-timeline__text">12 new users registered</span>
-                                                                            <span class="m-list-timeline__time">Just now</span>
-                                                                        </div>
-                                                                        <div class="m-list-timeline__item">
-                                                                            <span class="m-list-timeline__badge"></span>
-                                                                            <span class="m-list-timeline__text">System shutdown <span class="m-badge m-badge--success m-badge--wide">pending</span></span>
-                                                                            <span class="m-list-timeline__time">14 mins</span>
+                                                                            <span class="m-list-timeline__text"></span>
+                                                                            <span class="m-list-timeline__time"></span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -222,23 +220,51 @@
                                     </div>
                                 </li>
 
-                                <!-- 用户信息 -->
+                                <!-- 用户信息  -->
                                 <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium
                                     m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light"
                                     m-dropdown-toggle="click">
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
-                                        <span class="m-nav__link-icon"><i class="flaticon-profile-1"></i></span>
-                                        <span class="m-topbar__username m--hide">username</span>
+                                        <span class="m-topbar__userpic">
+													<img th:src="@{/static/image/img_avatar.png}" class="m--img-rounded m--marginless" alt="">
+                                        </span>
+                                        <span id="username" class="m-topbar__username m--hide"><span sec:authentication="name" ></span></span>
                                     </a>
                                     <div class="m-dropdown__wrapper">
                                         <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
                                         <div class="m-dropdown__inner">
+                                            <div class="m-dropdown__header m--align-center" style="background: url(/static/image/background_1.jpg); background-size: cover;">
+                                                <div class="m-card-user m-card-user--skin-dark">
+                                                    <div class="m-card-user__details">
+                                                        <span id="profile_username" class="m-card-user__name m--font-weight-500">
+                                                            <span sec:authentication="name">Bob</span>
+                                                            <span sec:authentication="principal.authorities"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="m-dropdown__body">
                                                 <div class="m-dropdown__content">
                                                     <ul class="m-nav m-nav--skin-light">
+                                                        <!-- 个人信息 -->
+                                                        <li class="m-nav__item">
+                                                            <a th:href="@{/userProfile}" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-profile-1"></i>
+                                                                <span class="m-nav__link-title">
+                                                                    <span class="m-nav__link-wrap">
+                                                                        <span class="m-nav__link-text">My Profile</span>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <!-- 分割线 -->
+                                                        <li class="m-nav__separator m-nav__separator--fit">
+                                                        </li>
                                                         <!-- 退出登录 -->
                                                         <li class="m-nav__item">
-                                                            <a th:href="@{/logout}" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">Logout</a>
+                                                            <form th:action="@{/auth/logout}" method="post">
+                                                                <button type="submit" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">Logout</button>
+                                                            </form>
                                                         </li>
                                                     </ul>
                                                 </div>

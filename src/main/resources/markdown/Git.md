@@ -56,7 +56,7 @@
 + `git commit -m 'comment'` 将暂存区的修改一起提交本地仓库
 + `git rm file` 从版本库删除文件，还需要commit一次
 + `git log --graph --oneline` 查看版本提交历史
-+ `git log <file>` 查看文件每次提交记录
++ `git log <file>` 查看文件每次提交记录 （-n 显示数目）
 + `git log -p <file>` 查看每次详细修改内容的diff
 
 ### 3. 分支Branch/标签Tag 命令

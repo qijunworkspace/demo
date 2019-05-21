@@ -1,5 +1,7 @@
 package com.qijun.demo.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.qijun.demo.mapper.UserMapper;
 import com.qijun.demo.model.User;
 import com.qijun.demo.response.CustomException;
@@ -57,6 +59,11 @@ public class UserServiceImpl implements UserService {
             }
         }
         return 0;
+    }
+
+    @Override
+    public List<User> searchUser(String username, Integer roleId) {
+        return userMapper.searchUser(username, roleId);
     }
 
     @Override

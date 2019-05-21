@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
@@ -88,6 +89,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     /**
      * Override this method to configure {@link WebSecurity}. For example, if you wish to
      * ignore certain requests.
+     * used for configuration settings that impact global security
+     * (ignore resources, set debug mode, reject requests by implementing a custom firewall definition).
      * 不需要登录的路径
      * @param web web安全对象
      */
@@ -96,7 +99,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         web.ignoring().antMatchers(staticPath);
         web.ignoring().antMatchers(GlobalConstants.LOGIN_PAGE);
         web.ignoring().antMatchers(GlobalConstants.LOGIN_KAPTHCA);
-        web.ignoring().antMatchers(GlobalConstants.LOGOUT_PROCESS_URL);
         web.ignoring().antMatchers(GlobalConstants.ERROR_PAGE);
         web.ignoring().antMatchers(GlobalConstants.ERROR_404_PAGE);
         web.ignoring().antMatchers(GlobalConstants.UNAUTHORIZED_PAGE);
@@ -106,12 +108,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //auth.authenticationProvider()
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
 
     /**
-     * allows configuration of web based security at a resource level,
+     * allows configuration of web based security at a resource level, based on a selection match
      * @param http http访问
      */
     @Override
@@ -120,21 +123,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         //Adds the Security headers to the response.
         // This is activated by default when using WebSecurityConfigurerAdapter
         //.tokenRepository("xxx")
-        http.headers().and()
+        http.headers()
+                .and()
                 .rememberMe()
                 //设置前台传送的Checkbox名称
                 .rememberMeParameter("remember")
                 //使用spring-session实现rememberMe
                 .rememberMeServices(springSessionRememberMeServices());
 
-        //设置验证码过滤, 拦截登录处理请求
-        http.addFilterBefore(kaptchaValidationFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin()
+        //设置form登陆请求
+        http.formLogin()
                 .loginPage(GlobalConstants.LOGIN_PAGE)
+                //.usernameParameter("username") //默认值
+                //.passwordParameter("password")
                 .loginProcessingUrl(GlobalConstants.LOGIN_PROCESS_URL)
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler);
                 //.defaultSuccessUrl(HOME_PAGE) //登录成功后重定向的页面
+
+        //添加验证码过滤器
+        http.addFilterBefore(kaptchaValidationFilter, UsernamePasswordAuthenticationFilter.class);
 
         //验证规则
         http.authorizeRequests()
@@ -152,8 +160,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
         //退出系统
         http.logout()
+                //如果使用了CSRF，必须使用POST方式退出
                 .logoutUrl(GlobalConstants.LOGOUT_PROCESS_URL)
+                //非要用GET，可以使用下面的配置
+                //.logoutRequestMatcher(new AntPathRequestMatcher(GlobalConstants.LOGOUT_PROCESS_URL))
                 .logoutSuccessUrl(GlobalConstants.LOGIN_PAGE)
+                .clearAuthentication(true)
                 .deleteCookies("SESSION","JSESSIONID")
                 .invalidateHttpSession(true);
 
@@ -164,7 +176,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         //.sessionAuthenticationStrategy()
         http.sessionManagement()
                 //Session无效的跳转页面
-                //.invalidSessionUrl(GlobalConstants.LOGIN_PAGE)
+                .invalidSessionUrl(GlobalConstants.LOGIN_PAGE)
                 //设置只允许一个用户登录
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
@@ -190,7 +202,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 
     /**
-     * 在spring-seesion中记录会话，可用于控制会话数量
+     * 在spring-session中记录会话，可用于控制会话数量
      * @return SpringSessionBackedSessionRegistry
      */
     @Bean

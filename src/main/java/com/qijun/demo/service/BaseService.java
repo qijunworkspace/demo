@@ -1,5 +1,7 @@
 package com.qijun.demo.service;
 
+import com.github.pagehelper.PageInfo;
+
 import java.util.List;
 
 /**
@@ -15,6 +17,7 @@ public interface BaseService<T, KEY> {
      * @return list
      */
     List<T> findAll();
+
 
     /**
      * 获取对象
@@ -50,4 +53,6 @@ public interface BaseService<T, KEY> {
      * @return 更新个数
      */
     int updateSelective(T record);
+
+
 }

@@ -4,7 +4,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
- * 部署在web容器中时必须设置
+ * 部署在web容器中
  * @author Qijun
  * @date 11/23/18 3:17 PM
  * @version 1.0

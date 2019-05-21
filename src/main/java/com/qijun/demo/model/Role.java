@@ -1,6 +1,7 @@
 package com.qijun.demo.model;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,9 @@ import java.util.List;
  * @date 12/14/18 9:45 AM
  * @version 1.0
  */
-public class Role {
+public class Role implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 主键
@@ -68,13 +71,13 @@ public class Role {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
+        sb.append(getClass().getName()+"["+getClass().getClassLoader()+"]");
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", role=").append(role);
         sb.append(", description=").append(description);
-        sb.append(", permissions=").append(permissions);
+        //sb.append(", permissions=").append(permissions);
         sb.append("]");
         return sb.toString();
     }

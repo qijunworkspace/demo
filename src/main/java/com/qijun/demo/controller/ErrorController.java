@@ -5,12 +5,13 @@ import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.stereotype.Controller;
 
 /**
- * 配置需要确认
+ * 用于配置发生错误时的页面跳转  ErrorViewResolver
  * @author Qijun
  * @date 11/28/18 11:36 AM
  * @version 1.0
  */
-@Controller
+//@Controller
+@Deprecated
 public class ErrorController extends AbstractErrorController{
 
 

@@ -2,6 +2,8 @@ package com.qijun.demo.service;
 
 import com.qijun.demo.model.User;
 
+import java.util.List;
+
 /**
  * 用户服务接口
  * @author Qijun
@@ -31,4 +33,12 @@ public interface UserService extends BaseService<User, Integer>{
      * @return 更新个数
      */
     int updateUserRole(Integer userId, Integer roleId);
+
+    /**
+     * 搜索用户信息-模糊搜索
+     * @param username 用户名
+     * @param roleId 角色编号
+     * @return 用户列表
+     */
+    List<User> searchUser(String username, Integer roleId);
 }

@@ -40,13 +40,13 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             throws IOException{
 
         String message = exception.getMessage();
-        //判断异常类型
+        //判断异常类型 -- mri
         if (exception instanceof UsernameNotFoundException){
             message = "Unknown username!";
         }else if (exception instanceof DisabledException){
             message = "Your account is disabled!";
         }else if (exception instanceof AccountExpiredException){
-            message = "Your account is expired!";
+            message = "Your account is expired or deleted!";
         }else if (exception instanceof LockedException){
             message = "Your account is locked!";
         }else if (exception instanceof CredentialsExpiredException){

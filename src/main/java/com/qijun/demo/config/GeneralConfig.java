@@ -3,7 +3,10 @@ package com.qijun.demo.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
@@ -36,15 +39,21 @@ public class GeneralConfig {
     @Bean
     public ObjectMapper getObjectMapper(){
         ObjectMapper mapper = new ObjectMapper();
-        //设置默认的时间序列化格式
+        //序列化时忽略为null的属性
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        //序列化时遇到空对象不报错
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        //反序列化时忽略未知属性
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        //序列化取消默认的时间
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
         return mapper;
     }
 
     /**
-     * 验证码配置类
+     * 验证码配置实例
      * @return kaptcha
      */
     @Bean
@@ -57,7 +66,7 @@ public class GeneralConfig {
         props.setProperty(Constants.KAPTCHA_BORDER_COLOR, "105,179,90");
         // 字体颜色
         props.setProperty(Constants.KAPTCHA_TEXTPRODUCER_FONT_COLOR, "BLUE");
-        //噪声颜色
+        // 噪声颜色
         props.setProperty(Constants.KAPTCHA_NOISE_COLOR,"pink");
         // 图片宽
         props.setProperty(Constants.KAPTCHA_IMAGE_WIDTH, "145");
@@ -67,7 +76,7 @@ public class GeneralConfig {
         props.setProperty(Constants.KAPTCHA_TEXTPRODUCER_FONT_SIZE, "30");
         // session key
         props.setProperty(Constants.KAPTCHA_SESSION_KEY, GlobalConstants.KAPTCHA_SESSION_KEY);
-        //设置生成的文本内容: 数字加大写字母，去除0/O 1/I
+        // 设置生成的文本内容: 数字加大写字母，去除0/O 1/I
         props.setProperty(Constants.KAPTCHA_TEXTPRODUCER_CHAR_STRING, "23456789QWERTYUPLKJHGFDSAMNBVCXZ");
         // 验证码长度
         props.setProperty(Constants.KAPTCHA_TEXTPRODUCER_CHAR_LENGTH, "4");

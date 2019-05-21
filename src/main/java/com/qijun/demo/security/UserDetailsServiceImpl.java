@@ -1,12 +1,17 @@
 package com.qijun.demo.security;
 
+import com.qijun.demo.common.GlobalConstants;
 import com.qijun.demo.mapper.UserMapper;
+import com.qijun.demo.model.Role;
 import com.qijun.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import javax.security.auth.login.AccountLockedException;
 
 /**
  * 用于安全验证，获取用户信息
@@ -17,6 +22,8 @@ import org.springframework.stereotype.Service;
  */
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
+
+    //private static final String SUPER_USERNAME = "qijun";
 
     @Autowired
     private UserMapper userMapper;
@@ -37,6 +44,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userMapper.findByUserName(username);
         if (null != user){
+            //System.out.println(user);
+            //System.out.println(">>>>>> "+user.getRole());
             return user;
         }
         throw new UsernameNotFoundException("Cannot find user["+username+"] detail from database!");

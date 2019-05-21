@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -31,7 +32,7 @@ public class ViewController {
      */
     @GetMapping("/unauthorized")
     public String unauthorized(){
-        return "unauthorized";
+      return "unauthorized";
     }
 
     /**
@@ -40,12 +41,13 @@ public class ViewController {
      */
     @GetMapping("/error")
     public String error(){
-        return "error";
+     return "error";
     }
 
     /**
      * 跳转404错误页面
      * @return path
+     *
      */
     @GetMapping("/error-404")
     public String error404(){
@@ -62,6 +64,26 @@ public class ViewController {
     }
 
     /**
+     * 跳转选中股票页面
+     * @param request
+     * @return
+     */
+    @GetMapping({"/selectedStock"})
+    public String selectedStock(HttpServletRequest request){
+        return "components/selected_stock";
+    }
+
+    /**
+     * 跳转查询股票页面
+     * @param request
+     * @return
+     */
+    @GetMapping({"/searchStock"})
+    public String searchStock(HttpServletRequest request){
+        return "components/search_stock";
+    }
+
+    /**
      * 跳转个人信息页面
      * @return path
      */
@@ -70,4 +92,24 @@ public class ViewController {
         return "components/user-profile";
     }
 
+    /**
+     * 跳转用户管理页面
+     * 管理员权限
+     * @return path
+     */
+    @RolesAllowed("ROLE_ADMIN")
+    @GetMapping("/userManagement")
+    public String userManagement(){
+        return "components/user-management";
+    }
+
+    /**
+     * 跳转字典项管理页面
+     * @return
+     */
+    @RolesAllowed("ROLE_ADMIN")
+    @GetMapping("/dictionary")
+    public String dictionary(){
+        return "components/dictionary";
+    }
 }

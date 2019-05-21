@@ -1,17 +1,21 @@
-1、配置SpringSecurity 配合springsession
-2、配置Redis
-3、配置Elasticsearch
-4、配置Druid
-5、配置Zookeeper
-6、引入通用异常处理
-7、mybatis
-8、Hibernate Validation
-9、Thymeleaf Metronic
-10、验证码
 
 《基于Springboot2的web开发环境搭建》
 
 项目：获取股票交易数据-队列，缓存，存储，页面显示统计分析
+
+首页：
+    今日交易日历 --- 内存
+    当日行情（三大板块）、选股行情 --- 实时更新 --- 缓存
+    规则检出股票
+
+选股管理：
+    距今涨跌幅，平均多少工作日涨幅最高，增删改查
+
+
+使用PYTHON文件获取数据，存储在redis及mysql中，定义定时任务（每日）调用刷新实时行情数据，及 日线行情数据，
+
+
+
 使用git作为代码管理工具
 --> 尝试引入Flink实现事件流处理
 

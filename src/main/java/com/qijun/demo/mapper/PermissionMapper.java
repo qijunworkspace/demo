@@ -51,7 +51,7 @@ public interface PermissionMapper {
         "values (#{id,jdbcType=INTEGER}, #{permission,jdbcType=VARCHAR}, ",
         "#{type,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR})"
     })
-    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=true, resultType=Integer.class)
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Integer.class)
     int insert(Permission record);
 
     /**

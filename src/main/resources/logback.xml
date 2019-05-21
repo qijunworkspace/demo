@@ -16,13 +16,19 @@
     <property name="PROJECT" value="demo" />
     <property name="ROOT" value="/logs/${PROJECT}/" />
     <property name="FILE_SIZE" value="10MB" />
-    <property name="MAX_HISTORY" value="50" />
+    <property name="MAX_HISTORY" value="30" />
+
+    <!-- 时间戳（只能表示某一时间） -->
     <timestamp key="DATETIME" datePattern="HH:mm:ss.SSS" />
 
+
+    <property name="TIME_PATTERN" value="yyyy-MM-dd HH:mm:ss.SSS" />
+
     <!-- 控制台打印，添加了颜色 -->
+    <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder charset="utf-8">
-            <pattern>%d{${DATETIME}} %highlight([%-5level]) %cyan([%thread]) %boldMagenta([%-36logger{1}]):%L - %green(%m%n)</pattern>
+           <pattern>%d{${TIME_PATTERN}} %highlight([%-5level]) %cyan([%thread]) %boldMagenta([%-36logger{1}]):%L - %green(%m%n)</pattern>
         </encoder>
     </appender>
 
@@ -30,7 +36,7 @@
     <!-- ERROR文件，按日期和文件大小 -->
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder charset="utf-8">
-            <pattern>%d{${DATETIME}} [%-5level][%thread] [%logger{1}:%L] - %m%n</pattern>
+            <pattern>%d{${TIME_PATTERN}} [%-5level][%thread] [%logger{1}:%L] - %m%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
@@ -41,7 +47,7 @@
             <fileNamePattern>${ROOT}%d/error.%i.log</fileNamePattern>
             <maxFileSize>${FILE_SIZE}</maxFileSize>
             <maxHistory>${MAX_HISTORY}</maxHistory>
-            <totalSizeCap>256MB</totalSizeCap>
+            <totalSizeCap>128MB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
@@ -49,7 +55,7 @@
     <!-- WARN文件，按日期和文件大小 -->
     <appender name="WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder charset="utf-8">
-            <pattern>%d{${DATETIME}} [%-5level][%thread] [%logger{1}:%L] - %m%n</pattern>
+            <pattern>%d{${TIME_PATTERN}} [%-5level][%thread] [%logger{1}:%L] - %m%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
@@ -60,7 +66,7 @@
             <fileNamePattern>${ROOT}%d/warn.%i.log</fileNamePattern>
             <maxFileSize>${FILE_SIZE}</maxFileSize>
             <maxHistory>${MAX_HISTORY}</maxHistory>
-            <totalSizeCap>256MB</totalSizeCap>
+            <totalSizeCap>128MB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
@@ -68,7 +74,7 @@
     <!-- INFO文件 -->
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder charset="utf-8">
-            <pattern>%d{${DATETIME}} [%-5level][%thread] [%logger{1}:%L] - %m%n</pattern>
+            <pattern>%d{${TIME_PATTERN}} [%-5level][%thread] [%logger{1}:%L] - %m%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
@@ -79,7 +85,7 @@
             <fileNamePattern>${ROOT}%d/info.%i.log</fileNamePattern>
             <maxFileSize>${FILE_SIZE}</maxFileSize>
             <maxHistory>${MAX_HISTORY}</maxHistory>
-            <totalSizeCap>256MB</totalSizeCap>
+            <totalSizeCap>128MB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
@@ -87,7 +93,7 @@
     <!-- DEBUG文件 -->
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder charset="utf-8">
-            <pattern>%d{${DATETIME}} [%-5level][%thread] [%logger{1}:%L] - %m%n</pattern>
+            <pattern>%d{${TIME_PATTERN}} [%-5level][%thread] [%logger{1}:%L] - %m%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>DEBUG</level>
@@ -98,7 +104,7 @@
             <fileNamePattern>${ROOT}%d/debug.%i.log</fileNamePattern>
             <maxFileSize>${FILE_SIZE}</maxFileSize>
             <maxHistory>${MAX_HISTORY}</maxHistory>
-            <totalSizeCap>256MB</totalSizeCap>
+            <totalSizeCap>128MB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
@@ -106,7 +112,7 @@
     <!-- TRACE文件 -->
     <appender name="TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder charset="utf-8">
-            <pattern>%d{${DATETIME}} [%-5level][%thread] [%logger{1}:%L] - %m%n</pattern>
+            <pattern>%d{${TIME_PATTERN}} [%-5level][%thread] [%logger{1}:%L] - %m%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>TRACE</level>
@@ -117,7 +123,7 @@
             <fileNamePattern>${ROOT}%d/trace.%i.log</fileNamePattern>
             <maxFileSize>${FILE_SIZE}</maxFileSize>
             <maxHistory>${MAX_HISTORY}</maxHistory>
-            <totalSizeCap>256MB</totalSizeCap>
+            <totalSizeCap>128MB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
@@ -130,18 +136,18 @@
     -->
 
     <!-- SQL相关日志输出-->
-    <logger name="org.apache.ibatis" level="INFO" additivity="false" />
-    <logger name="org.mybatis.spring" level="INFO" additivity="false" />
+    <logger name="org.apache.ibatis" level="DEBUG" additivity="false" />
+    <logger name="org.mybatis.spring" level="DEBUG" additivity="false" />
     <logger name="com.github.miemiedev.mybatis.paginator" level="INFO" additivity="false" />
 
     <!-- Logger 根配置 -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="ERROR"/>
-        <appender-ref ref="WARN"/>
-        <appender-ref ref="INFO"/>
-        <appender-ref ref="DEBUG"/>
-        <!-- <appender-ref ref="TRACE" /> -->
+        <!--  <appender-ref ref="ERROR"/>
+         <appender-ref ref="WARN"/>
+         <appender-ref ref="INFO"/>
+         <appender-ref ref="DEBUG"/>
+         <appender-ref ref="TRACE" /> -->
     </root>
 
 </configuration>

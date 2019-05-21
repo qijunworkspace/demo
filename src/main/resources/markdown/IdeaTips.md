@@ -10,6 +10,7 @@
 |Ctrl + Enter   |修改导入的包|
 |Ctrl + Alt + O |优化导入的包和类，去除未使用的包引用|
 |Ctrl + Alt + I |格式化选中的代码|
+|Ctrl + Alt + L |格式化当前文件|
 |Ctrl + Alt + B |查看接口的实现类|
 |Ctrl + F       |在当前文件中查找|
 |Ctrl + Shift + F|在工程中查找内容|

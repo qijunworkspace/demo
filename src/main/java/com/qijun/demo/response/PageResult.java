@@ -4,11 +4,12 @@ import java.util.List;
 
 /**
  * 通用的分页返回结果
- *
+ * @deprecated  修改为使用pagehelper pageinfo
  * @author Qijun
  * @version 1.0
  * @date 12/21/18 4:11 PM
  */
+@Deprecated
 public class PageResult {
 
     /**

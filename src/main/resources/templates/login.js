@@ -58,8 +58,8 @@ var Login = function(){
             form.validate({
                 rules: {
                     username: {
-                        required: true,
-                        minlength: 5,
+                        //required: true,
+                        //minlength: 5,
                         maxlength: 20,
                         normalizer: function(value) {
                             return $.trim(value);
@@ -122,6 +122,9 @@ var Login = function(){
                         minlength: 5,
                         maxlength: 20,
                     },
+                    telephone: {
+                        required: true,
+                    },
                     email: {
                         required: true,
                         email: true
@@ -130,6 +133,9 @@ var Login = function(){
                         required: true,
                         minlength: 5,
                         maxlength: 20,
+                        normalizer: function(value) {
+                            return $.trim(value);
+                        }
                     },
                     rpassword: {
                         required: true,
